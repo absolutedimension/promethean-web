@@ -7,6 +7,10 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','$sta
 
     //$scope.machines = [{},{},{},{}];
 
+    if(!$scope.authentication.user){
+      $state.go('authentication');
+    }
+
     this.elevation = 1;
     this.showFrame = 3;
      $rootScope.$state = $state;

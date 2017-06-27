@@ -55,7 +55,6 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         // If successful we assign the response to the global user model
         $scope.authentication.user = response.data;
         // And redirect to the previous or home page
-        alert($scope.authentication.user.roles.indexOf('admin'));
         if($scope.authentication.user.roles.indexOf('admin') > -1){
           $location.url('admin/users'); 
         } else{
