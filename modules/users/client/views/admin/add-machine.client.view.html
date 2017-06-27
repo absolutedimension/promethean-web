@@ -1,0 +1,136 @@
+<section style="margin: 20px" ng-controller="UserListController">   
+     <div class="row" style="margin: 20px" >
+         <span style="font-size: 20px;color: #333333">ADD USER</span>
+         <hr style="margin-top: 5px;margin-bottom: 7px"></hr> 
+        <form name="userForm" class="form-inline"  ng-submit="addUser(userForm.$valid)" novalidate>
+            <fieldset>
+                <div style="position: relative;height: 40px;margin-top: 20px">
+                   <span style="font-size: 18px;color: #666666">COMPANY DETAILS</span>
+                </div>
+                 <div style="position: relative;height: 40px;margin-top: 20px">
+                    <span style="position: absolute;top:10px">Company Name </span>
+                    <input id="machineName" type="text" ng-model="companydetail.companyName" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                  <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Machine Name </span>
+                    <input id="companyName" type="text" ng-model="companydetail.machineName" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                 <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Machine Id </span>
+                    <input id="machineId" type="text" ng-model="companydetail.machineId" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                  <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Unit Id </span>
+                    <input id="unitId" type="text" ng-model="companydetail.unitId" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                 <!--<button ng-click="uploadMachineImage">Upload Machine Image</button> -->
+                  <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Location </span>
+                    <input id="location" type="text" ng-model="companydetail.location" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                  <div style="position: relative;height: 40px;margin-top: 20px">
+                      <span style="font-size: 18px;color: #666666">USER DETAILS</span>
+                  </div>
+                  <div style="position: relative;height: 40px;margin-top: 20px">
+                    <span style="position: absolute;top:10px">User Name </span>
+                    <input type="text" ng-model="newUser.firstName" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div> 
+                  <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Email </span>
+                    <input type="text" ng-model="newUser.email" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                 <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Password </span>
+                    <input type="password" ng-model="newUser.password" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                 </div>
+                 <div style="position: relative;height: 40px;">
+                    <button  ng-click="addUserToMachine(newUser)" style="float: right;border-radius: 20px;background-color: #08c65b;color: white;width: 75px;height: 25px;border: 0px"> Add User</button>
+                 </div>
+                 <hr></hr>
+                  <div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px">Existing users </span>
+                    <select id="userDropDown" type="dropdown" ng-change="selectedDropDown(selectedUser)" ng-model="selectedUser" ng-options="user.username for user in users" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%">{{selectedUser.username}}</select>
+                 </div> 
+                    <md-chips md-on-remove="chipsChanged($chip)" ng-model="selectedUser" readonly="readonly" md-removable="removable" md-chip-remove></md-chips>
+                  <!--<div style="position: relative;height: 40px;">
+                    <span style="position: absolute;top:10px;font-size: 18px">MACHINE DETAILS </span>                
+                 </div> -->
+                 <!--<hr style="margin-top: 5px;margin-bottom: 7px"></hr>
+                 <div style="position: relative;height: 40px;margin-top: 20px">
+                   <span style="font-size: 18px;color: #666666">Machine Dashboard - Live</span>
+                </div>
+                <table style="width: 100%;border-collapse: separate;border-spacing: 0 1em;">
+                    <tr>
+                        <td>
+                           <span> Value 1</span>
+                        </td>
+                         <td>
+                             <input style="border: 0px;background: #e2e2e2" placeholder="Title"></input>
+                        </td>
+                         <td>
+                            <input style="border: 0px;background: #e2e2e2" placeholder="value"></input>
+                        </td>
+                        
+                    </tr> 
+                      <tr>
+                        <td>
+                           <span> Value 2</span>
+                        </td>
+                        <td>
+                             <input style="border: 0px;background: #e2e2e2" placeholder="Title"></input>
+                        </td>
+                         <td>
+                            <input style="border: 0px;background: #e2e2e2" placeholder="value"></input>
+                        </td>
+                        
+                    </tr>
+                      <tr>
+                        <td>
+                           <span> Value 3</span>
+                        </td>
+                        <td>
+                             <input style="border: 0px;background: #e2e2e2" placeholder="Title"></input>
+                        </td>
+                         <td>
+                            <input style="border: 0px;background: #e2e2e2" placeholder="value"></input>
+                        </td>
+                        
+                    </tr>
+                    
+                </table>
+                  <div style="position: relative;height: 40px;margin-top: 20px">
+                   <span style="font-size: 18px;color: #666666">Graph</span>
+                </div>
+                <table style="width: 100%;border-collapse: separate;border-spacing: 0 1em;">
+                    <tr>
+                        <td>
+                           <span> Graph Detail</span>
+                        </td>
+                         <td>
+                             <input style="border: 0px;background: #e2e2e2" placeholder="X"></input>
+                        </td>
+                         <td>
+                            <input style="border: 0px;background: #e2e2e2" placeholder="Y"></input>
+                        </td>                      
+                    </tr> 
+                      <tr>
+                        <td>
+                           <span> Upload Config</span>
+                        </td>
+                        <td>
+                             <input style="border: 0px;background: #e2e2e2" placeholder="Title"></input>
+                        </td>
+                    </tr>    
+                </table>                    -->
+                <div class="form-group form-inline" style="height: 50px;width: 100%">
+                    <input type="submit" value="Add Machine" 
+                    ng-click="addUserInfo()"
+                    class="btn btn-default add-machine-button">
+                </div>
+                <div ng-show="error" class="text-danger">
+                    <strong ng-bind="error"></strong>
+                </div>
+            </fieldset>
+     </form> 
+   </div>
+</section>

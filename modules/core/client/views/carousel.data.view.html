@@ -1,0 +1,47 @@
+<div id="dataCarousel" class="carousel" data-flickity='{ "groupCells": false }' 
+     style="background: white;margin: -20px" ng-controller="MachineChartController">
+    <div ng-repeat="chartData in chartClickData" >
+        <div id='dataResultCard' 
+            style='width:608px;height:200px;max-width:100%;position: relative; border: 1px solid #e2e2e2;margin:10px;border-radius: 5px' >   
+                <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th sortable="code" class="sortable">
+                    Day {{chartData.day[0]}}
+                </th>
+                <th sortable="placed" class="sortable">
+                    Day {{chartData.day[1]}}
+                </th>
+                <th sortable="placed" class="sortable">
+                    Day {{chartData.day[2]}}
+                </th>
+                <th sortable="placed" class="sortable">
+                    Day {{chartData.day[3]}}
+                </th>
+                <th sortable="placed" class="sortable">
+                    Day {{chartData.day[4]}}
+                </th>
+                    <th sortable="placed" class="sortable">
+                    Day {{chartData.day[5]}}
+                </th>
+                <th sortable="placed" class="sortable">
+                    Day {{chartData.day[6]}}
+                </th>           
+            </tr>
+            </thead>
+            <tbody>
+            <tr grid-item>
+                <td ng-bind="chartData.totalEnergy[0]"></td>
+                <td ng-bind="chartData.totalEnergy[1]"></td>
+                <td ng-bind="chartData.totalEnergy[2]"></td>
+                <td ng-bind="chartData.totalEnergy[3]"></td>
+                <td ng-bind="chartData.totalEnergy[4]"></td>
+                <td ng-bind="chartData.totalEnergy[5]"></td>
+                <td ng-bind="chartData.totalEnergy[6]"></td>             
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+    <script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>

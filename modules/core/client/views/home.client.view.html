@@ -1,0 +1,35 @@
+<div ng-controller="HomeController" style="background-color: #fbfcfd;height: 620px;top: 4px;position: relative;">
+  <div style="position: relative;width: 100%;height: 170px" >
+      <input id="deviceSearch" type="text" autocomplete="true" ng-model="searchText" placeholder="Search"/>   
+  </div>
+    <div  style="position: relative;width: 100%" >
+        <div class="col col-xs-6"  ng-repeat="machine in authentication.user.machineAllocated | filter:searchText" style="left:10%" ng-init="getTablesName()">
+          <div class="padded" md-whiteframe="{{height}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center" ng-click="goToCharts(machine)" 
+                  ng-init="height = 3" ng-mouseenter="height = 6" ng-mouseleave="height = 3" style="width: 300px;height: 110px;margin: 10px">             
+                <table style="width: 100%;height: 100%">
+                  <tr>
+                    <!--<td style="width: 30%">
+                       <img id="machineImage" style="width: 70px; height: 70px; margin: 10px;"/>
+                    </td>-->
+                    <td style="width: 90%;padding-left: 15px">
+                      <span style="color: #666;font-size: 18px">{{machine.machineName}}</span>
+                      </br>
+                       <img id="machineImage" ng-src="./modules/core/client/img/location.png"/>
+                       <span style="color: #999;font-size: 14px">{{machine.location}}</span>
+                      </br>
+                      <span style="color: #666;font-size: 16px">Device Id : {{machine.machineId}}</span>
+                      </br>
+                      <span style="color: #666;font-size: 16px">Unit Id : {{machine.unitId}}</span>
+                      
+                    </td>
+                    <td style="height: 100%">
+                      <div style="height: 100%;background: orange">
+                        <img ng-src="/modules/core/client/img/right.png" style="width: 24px;height: 24px;position: absolute;top: 42%;margin-left: 5px;"/>
+                      </div>
+                    </td>
+                  </tr>
+              </table>
+          </div>
+        </div>
+   </div>
+</div>

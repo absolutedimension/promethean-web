@@ -1,0 +1,109 @@
+<div style="background-color: #fbfcfd" ng-controller="ChartLiveController">
+     <div class="row"  style="top:58px;width: 100%;position: absolute;background-color:#fbfcfd;padding-top: 20px " ng-init="machineDetailInit()">
+        <div class="col-md-3" style="border-right: 1px solid #e2e2e2;width: 15%;height: 580px">
+             <table style="left: 25%;position: absolute; border-collapse: separate;border-spacing: 0 0em;top:50px">
+                 <tr>
+                    <td>
+                        <ul style="list-style-type: none;cursor: pointer">
+                            <li>
+                                 <a ui-sref="home">Home</a>
+                            </li>
+                        </ul>    
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul>
+                            <li style="color: blue;list-style-type: disc;font-size: 15px">
+                                <a style="color: blue">Live</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul style="list-style-type: none;cursor: pointer">
+                            <li>
+                                 <a style="cursor: pointer" ng-click="goToHistoricState()">Historic</a>
+                            </li>
+                        </ul>    
+                    </td>
+                </tr>
+            </table>                 
+        </div>
+        <div class="col-md-9" ng-show="currentTab == 'live'?true:false" style="width: 85%;height: 580px">
+            <div id="liveTab">   
+                <table style="width: 100%; text-align: center">
+                    <tr>
+                        <td>
+                            <span style="color: #666666">LOCATION</span>
+                            </br>
+                            <span style="color: #999999">{{machineObject.location}}</span>
+                        </td>
+                        <td>
+                            <span style="color: #666666">MACHINE NAME</span>
+                            </br>
+                            <span style="color: #999999">{{machineObject.machineName}}</span>
+                        </td>
+                        <td>
+                            <span style="color: #666666">DEVICE ID</span>
+                            </br>
+                            <span style="color: #999999">{{machineObject.machineId}}</span>
+                        </td>
+                    </tr>
+                </table>
+                <hr style="margin: 10px"></hr>
+                <div style="margin-bottom: 30px">             
+                    <div id="liveChartContainer" style="width: 650px; height: 350px; float: left;
+                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px"></div>   
+                          <div layout="row" layout-sm="column" layout-align="space-around" style="top:200px;right:150px;position: absolute">
+                             <md-progress-circular md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
+                         </div>
+                    <div id="container-speed" style="width: 350px; height: 350px; float: left;
+                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px"></div>
+                </div>    
+                <table style="width: 50%;text-align: center;bottom: 30px;left: 40px;position: absolute;" >                 
+                    <tr>
+                        <td>
+                            <div style="width: 140px;height: 70px;background-color: white;padding: 10px;
+                            box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+                                <span style="color: #666666">FLOW</span>
+                                </br>
+                                <span step="0.01" style="color: #999999">{{averageFlowIn.toFixed(2)}} KLP</span>
+                            </div>
+                        </td>
+                        <td >
+                            <div  style="width: 140px;height: 70px;background-color: white;padding: 10px;
+                            box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+                                <span style="color: #666666">WATER DELTA</span>
+                                </br>
+                                <span style="color: #999999">{{averageWaterDelTemp.toFixed(2)}} °C</span>
+                            </div>
+                        </td>
+                        <td >
+                            <div  style="width: 140px;height: 70px;background-color: white;padding: 10px;
+                            box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+                                <span style="color: #666666">POWER</span>
+                                </br>
+                                <span style="color: #999999">{{averagePower.toFixed(2)}} KW</span>
+                            </div>
+                        </td>            
+                    </tr>
+                </table>
+            </div>      
+        </div>
+        <!--<div class="col-md-9"  ng-show="currentTab == 'historic'?true:false" >
+              <div id="historicTab" class="row">
+                <div class="col-md-9" style="margin-left: 30px" ng-controller="MachineChartController">
+                    <div id="containerChart" style="width: 100%;background: white;height: 300px;
+                        box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+                    </div>
+                    <div id="flowContainer" style="height: 200px;box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+                    </div>
+                </div>
+                <div class="col-md-3" id="carouselContainer"  style="width: 34%;" ng-controller="MachineChartController">
+                </div>    
+            </div>    
+        </div>-->
+    </div>
+</div>

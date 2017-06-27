@@ -1,0 +1,128 @@
+@media (min-width: 992px) {
+  .nav-users {
+    position: fixed;
+  }
+}
+.social-account-container {
+  display: inline-block;
+  position: relative;
+}
+.btn-remove-account {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+.user-profile-picture {
+  min-height: 150px;
+  max-height: 150px;
+}
+.user-modal-window .modal-content {
+  height: 570px
+}
+.user-modal-window .modal-content{
+ overflow: auto
+}
+.admin-modal-window .modal-content {
+  height: 300px;
+  padding: 20px;
+}
+.searchInput{
+    width: 80%;
+    height: 100%;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: 0px;
+    border-radius: 50px;
+    box-shadow: 0 0 10px #c7c7c7;
+    position: relative;
+    left: 5%;
+    bottom: 10px;
+}
+.searchInput:focus{
+    outline:0;
+}
+.password {
+  border: 0px;border-bottom: 1px solid #e2e2e2;border-radius: 0px;border-top: 0px;width: 300px
+}
+.password :focus{
+  outline:0;
+}
+.username {
+  border: 0px;border-bottom: 1px solid #e2e2e2;border-radius: 0px;border-top: 0px;width: 300px
+}
+.username :focus{
+  outline:0;
+}
+
+/* Style the tab */
+div.tab {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    width: 30%;
+    height: 300px;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    display: block;
+    background-color: inherit;
+    color: black;
+    padding: 22px 16px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    float: left;
+    padding: 0px 12px;
+    border: 1px solid #ccc;
+    width: 70%;
+    border-left: none;
+    height: 300px;
+}
+.machine-selected{
+  list-style: 'disc';
+  font-size: 16px;
+  color: blue;
+}
+.user-selected{
+  list-style: 'disc';
+  font-size: 16px;
+  color: blue;
+}

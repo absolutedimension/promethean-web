@@ -1,0 +1,22 @@
+ 
+ <div style="position: relative;height: 40px;margin-top: 20px" ng-controller="AuthenticationController">
+            <span style="font-size: 18px;color: #666666">USER DETAILS</span>
+        </div>
+        <div style="position: relative;height: 40px;margin-top: 20px">
+        <span style="position: absolute;top:10px">User Name </span>
+        <input type="text" ng-model="newUser.firstName" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+        </div> 
+        <div style="position: relative;height: 40px;">
+        <span style="position: absolute;top:10px">Email </span>
+        <input type="text" ng-model="newUser.email" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+        </div>
+        <div style="position: relative;height: 40px;">
+        <span style="position: absolute;top:10px">Password </span>
+        <input type="password" ng-model="newUser.password" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+        </div>
+        <div style="position: relative;height: 40px;">
+        <button  ng-click="doAdminSignup(newUser)" style="float: right;border-radius: 20px;background-color: #08c65b;color: white;width: 75px;height: 25px;border: 0px"> Add User</button>
+        </div>
+        <hr></hr>
+
+</div>
