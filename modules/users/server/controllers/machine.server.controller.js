@@ -61,11 +61,18 @@ exports.getMachines = function (req, res, next,id) {
 };
 
 exports.getDataByYear = function(req,res,next,id) {
-  var deviceId = parseInt(id);
+  var tempId = id;
+  var machineId = tempId.split("_")[0];
+  var unitId = tempId.split("_")[1];
+  var deviceId = parseInt(machineId);
    switch(deviceId){
     case 4:
-      getDataByYear1_4(res,deviceId);
-
+      if(unitId == 1) {
+         getDataByYear1_4(res,deviceId);
+      }
+      if(unitId == 2) {
+         getDataByYear2_4(res,deviceId);
+      }
       break;
    case 98:
       getDataByYear_98(res,deviceId);
@@ -73,8 +80,6 @@ exports.getDataByYear = function(req,res,next,id) {
    case 14:
       getDataByYear_14(res,deviceId);
   }
-  var f0_test = 11;
-  var deviceId = parseInt(id);
 };
 var dataByYear = {unit1:null,unit2:null};
 function getDataByYear1_4(res,deviceId){
@@ -95,9 +100,7 @@ function getDataByYear1_4(res,deviceId){
         } else if (!machines) {
         return next(new Error('Failed to load Machine ' +98));
       }
-      dataByYear.unit1 = machines;
-      getDataByYear2_4(res,deviceId); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -119,8 +122,7 @@ function getDataByYear2_4(res,deviceId){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByYear.unit2 = machines; 
-      res.jsonp(dataByYear);
+      res.jsonp(machines);
    });
 }
 
@@ -170,12 +172,19 @@ function getDataByYear_14(res,deviceId){
 
 var dataByMonth = {unit1:null,unit2:null};
 exports.getDataByMonth = function(req,res,next){
-  var f0_test = 11;
   var year_input = parseInt(req.param('year'));
-  var deviceId = parseInt(req.param('dIdMonth'));
+  var machineId = req.param('dIdMonth');
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
    switch(deviceId){
     case 4:
-      getDataByMonth1_4(res,deviceId,year_input);
+      if(unitId == 1) {
+        getDataByMonth1_4(res,deviceId,year_input);
+      }
+      if(unitId == 2) {
+        getDataByMonth2_4(res,deviceId,year_input);
+      }     
       break;
    case 98:
       getDataByMonth_98(res,deviceId,year_input);
@@ -217,9 +226,7 @@ function getDataByMonth1_4(res,deviceId,year_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByMonth.unit1 = machines;
-      getDataByMonth2_4(res,deviceId,year_input); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 function getDataByMonth2_4(res,deviceId,year_input){
@@ -253,8 +260,7 @@ function getDataByMonth2_4(res,deviceId,year_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByMonth.unit2 = machines; 
-      res.jsonp(dataByMonth);
+      res.jsonp(machines);
    });
 }
 
@@ -330,14 +336,20 @@ function getDataByMonth_14(res,deviceId,year_input){
 
 var dataByDay = {unit1:null,unit2:null};
 exports.getDataByDay = function(req,res,next,id){
-  var f0_test = 11;
   var year_input = parseInt(req.param('year'));
   var month_input = parseInt(req.param('month'));
-  var deviceId = parseInt(id);
+  var tempId = id;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   console.log("Device Id :"+deviceId,year_input,month_input);
   switch(deviceId){
     case 4:
-      getDataByDay1_4(res,deviceId,year_input,month_input);
+      if(unitId == 1) {
+         getDataByDay1_4(res,deviceId,year_input,month_input);
+      }
+      if(unitId == 2) {
+         getDataByDay2_4(res,deviceId,year_input,month_input);
+      }    
       break;
    case 98:
       getDataByDay_98(res,deviceId,year_input,month_input);
@@ -385,9 +397,7 @@ function getDataByDay1_4(res,deviceId,year_input,month_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       } 
-      dataByDay.unit1 = machines;
-      getDataByDay2_4(res,deviceId,year_input);
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -428,8 +438,7 @@ function getDataByDay2_4(res,deviceId,year_input,month_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByDay.unit2 = machines; 
-      res.jsonp(dataByDay);
+      res.jsonp(machines);
    });
 }
 
@@ -519,15 +528,22 @@ function getDataByDay_14(res,deviceId,year_input,month_input){
 
 var dataByHour = {unit1:null,unit2:null};
 exports.getDataByHour = function(req,res,next,id){
-  var f0_test = 11;
   var year_input = parseInt(req.param('year'));
   var month_input = parseInt(req.param('month'));
   var day_input = parseInt(req.param('day'));
-  var deviceId = parseInt(req.param('dIdHour'));
+  var machineId = req.param('dIdHour');
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   console.log("Param inputs "+year_input,month_input,day_input,deviceId);
    switch(deviceId){
     case 4:
-      getDataByHour1_4(res,deviceId,year_input,month_input,day_input);
+      if(unitId == 1) {
+        getDataByHour1_4(res,deviceId,year_input,month_input,day_input);
+      }
+      if(unitId == 2) {
+        getDataByHour2_4(res,deviceId,year_input,month_input,day_input);
+      }   
       break;
    case 98:
       getDataByHour_98(res,deviceId,year_input,month_input,day_input);
@@ -574,9 +590,7 @@ function getDataByHour1_4(res,deviceId,year_input,month_input,day_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByHour.unit1 = machines;
-      getDataByHour2_4(res,deviceId,year_input,month_input,day_input); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 function getDataByHour2_4(res,deviceId,year_input,month_input,day_input){
@@ -615,8 +629,7 @@ function getDataByHour2_4(res,deviceId,year_input,month_input,day_input){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      dataByHour.unit2 = machines; 
-      res.jsonp(dataByHour);
+      res.jsonp(machines);
    });
 }
 
@@ -704,11 +717,19 @@ function getDataByHour_14(res,deviceId,year_input,month_input,day_input) {
 var waterInData = {unit1:null,unit2:null};
 exports.getAverageWaterIn = function(req,res,next,id){
   console.log("Id is :"+id);
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   switch(deviceId){
     case 4:
-      getAverageWaterIn1_4(deviceId,res);
-     
+      if(unitId == 1) {
+         getAverageWaterIn1_4(deviceId,res);
+      }
+      if(unitId == 2) {
+         getAverageWaterIn2_4(deviceId,res);
+      }
+        
       break;
    case 14:
       getAverageWaterIn_14(deviceId,res);
@@ -739,9 +760,7 @@ function getAverageWaterIn1_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterInData.unit1 = machines;
-      getAverageWaterIn2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 function getAverageWaterIn2_4(deviceId,res){
@@ -765,8 +784,7 @@ function getAverageWaterIn2_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterInData.unit2 = machines; 
-      res.jsonp(waterInData);
+      res.jsonp(machines);
    });
 }
 function getAverageWaterIn_98(deviceId,res){
@@ -822,11 +840,18 @@ function getAverageWaterIn_14(deviceId,res){
 var waterOutData = {unit1:null,unit2:null};
 exports.getAverageWaterOut = function(req,res,next,id){
   console.log("Id is :"+id);
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   switch(deviceId){
     case 4:
-      getAverageWaterOut1_4(deviceId,res);
-      
+      if(unitId == 1) {
+         getAverageWaterOut1_4(deviceId,res);
+      }
+      if(unitId == 2) {
+         getAverageWaterOut2_4(deviceId,res);
+      }    
       break;
    case 14:
       getAverageWaterOut_14(deviceId,res);
@@ -857,9 +882,7 @@ function getAverageWaterOut1_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterOutData.unit1 = machines;
-      getAverageWaterOut2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });  
 }
 
@@ -883,8 +906,7 @@ function getAverageWaterOut2_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-       waterOutData.unit2 = machines; 
-      res.jsonp(waterOutData);
+      res.jsonp(machines);
    });  
 }
 
@@ -939,11 +961,18 @@ function getAverageWaterOut_98(deviceId,res){
 var waterDelTempData = {unit1:null,unit2:null};
 exports.getAverageWaterDelTemp = function(req,res,next,id){
     console.log("Id is :"+id);
-    var deviceId = parseInt(id);
+    var machineId = id;
+    var tempId = machineId;
+    var deviceId = parseInt(tempId.split("_")[0]);
+    var unitId = tempId.split("_")[1];
     switch(deviceId){
     case 4:
-      getAverageWaterDelTime1_4(deviceId,res);
-     
+      if(unitId == 1){
+         getAverageWaterDelTime1_4(deviceId,res);
+      }
+      if(unitId == 2){
+         getAverageWaterDelTime2_4(deviceId,res);
+      }    
       break;
    case 14:
       getAverageWaterDelTime_14(deviceId,res);
@@ -974,9 +1003,7 @@ function getAverageWaterDelTemp1_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempData.unit1 = machines;
-      getAverageWaterDelTemp2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -1000,8 +1027,7 @@ function getAverageWaterDelTemp2_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempData.unit2 = machines; 
-      res.jsonp(waterDelTempData);
+      res.jsonp(machines);
    });
 }
 
@@ -1057,11 +1083,18 @@ function getAverageWaterDelTemp_98(deviceId,res){
 
 var gaugeData = {unit1:null,unit2:null};
 exports.getGaugeValue = function(req,res,next,id){
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
    switch(deviceId){
     case 4:
-      getGaugeValue1_4(deviceId,res);
-     
+      if(unitId == 1) {
+        getGaugeValue1_4(deviceId,res);
+      }
+      if(unitId == 2) {
+        getGaugeValue2_4(deviceId,res);
+      }     
       break;
    case 14:
       getGaugeValue_14(deviceId,res);
@@ -1093,9 +1126,7 @@ function getGaugeValue1_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      gaugeData.unit1 = machines;
-       getGaugeValue2_4(deviceId,res); 
-     // res.jsonp(machines);
+       res.jsonp(machines);
    });
 }
 function getGaugeValue2_4(deviceId,res){
@@ -1119,8 +1150,7 @@ function getGaugeValue2_4(deviceId,res){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      gaugeData.unit2 = machines; 
-      res.jsonp(gaugeData);
+      res.jsonp(machines);
    });
 }
 
@@ -1178,11 +1208,18 @@ function getGaugeValue_98(deviceId,res){
 var waterInLiveData = {unit1:null,unit2:null};
 exports.getAverageFlowLive = function(req,res,next,id){
   console.log("Id is :"+id);
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   switch(deviceId){
     case 4:
-      getAverageWaterInLive1_4(deviceId,res);
-     
+      if(unitId == 1){
+        getAverageWaterInLive1_4(deviceId,res);
+      }
+      if(unitId == 2){
+        getAverageWaterInLive2_4(deviceId,res);
+      }   
       break;
    case 14:
       getAverageWaterInLive_14(deviceId,res);
@@ -1214,9 +1251,7 @@ exports.getAverageFlowLive = function(req,res,next,id){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterInLiveData.unit1 = machines;
-       getAverageWaterInLive2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
  }
   function getAverageWaterInLive2_4(deviceId,res) {
@@ -1240,8 +1275,7 @@ exports.getAverageFlowLive = function(req,res,next,id){
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterInLiveData.unit2 = machines; 
-      res.jsonp(waterInLiveData);
+      res.jsonp(machines);
    });
  }
 
@@ -1298,11 +1332,18 @@ exports.getAverageFlowLive = function(req,res,next,id){
 var waterOutLiveData = {unit1:null,unit2:null};
 exports.getAveragePowerLive = function(req,res,next,id){
     console.log("Id is :"+id);
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
    switch(deviceId){
     case 4:
-      getAveragePowerLive1_4(deviceId,res);
-      
+      if(unitId == 1){
+        getAveragePowerLive1_4(deviceId,res);
+      }
+      if(unitId == 2){
+        getAveragePowerLive1_4(deviceId,res);
+      }    
       break;
    case 14:
       getAveragePowerLive_14(deviceId,res);
@@ -1334,9 +1375,7 @@ function getAveragePowerLive1_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempLiveData.unit1 = machines;
-      getAveragePowerLive2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
    
 }
@@ -1362,9 +1401,7 @@ function getAveragePowerLive2_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempLiveData.unit1 = machines;
-      getAverageWaterDelTempLive2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -1389,9 +1426,7 @@ function getAveragePowerLive_14(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempLiveData.unit1 = machines;
-      getAverageWaterDelTempLive2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -1416,9 +1451,7 @@ function getAveragePowerLive_98(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterDelTempLiveData.unit1 = machines;
-      getAverageWaterDelTempLive2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 
@@ -1426,11 +1459,18 @@ function getAveragePowerLive_98(deviceId,res) {
 var waterDelTempLiveData = {unit1:null,unit2:null};
 exports.getAverageWaterDelTempLive = function(req,res,next,id){
   console.log("Id is :"+id);
-  var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
    switch(deviceId){
     case 4:
-      getAverageWaterDelTempLive1_4(deviceId,res);
-      
+      if(unitId == 1){
+        getAverageWaterDelTempLive1_4(deviceId,res);
+      }
+      if(unitId == 2){
+        getAverageWaterDelTempLive2_4(deviceId,res);
+      }     
       break;
    case 14:
       getAverageWaterDelTempLive_14(deviceId,res);
@@ -1462,8 +1502,6 @@ function getAverageWaterDelTempLive1_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterOutLiveData.unit1 = machines;
-      //getAverageWaterDelTempLive2_4(deviceId,res); 
       res.jsonp(machines);
    });  
 }
@@ -1488,8 +1526,6 @@ function getAverageWaterDelTempLive2_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterOutLiveData.unit1 = machines;
-     // getAverageWaterOutLive2_4(deviceId,res); 
       res.jsonp(machines);
    });  
 }
@@ -1514,8 +1550,6 @@ function getAverageWaterDelTempLive_14(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterOutLiveData.unit1 = machines;
-     // getAverageWaterOutLive2_4(deviceId,res); 
       res.jsonp(machines);
    });  
 }
@@ -1540,19 +1574,24 @@ function getAverageWaterDelTempLive_98(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      waterOutLiveData.unit1 = machines;
-     // getAverageWaterOutLive2_4(deviceId,res); 
       res.jsonp(machines);
    });  
 }
 
 var liveData = {unit1:null,unit2:null};
 exports.getLiveData = function(req,res,next,id){
-    var deviceId = parseInt(id);
+  var machineId = id;
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   switch(deviceId){
     case 4:
-      getLiveData1_4(deviceId,res);
-      
+      if(unitId == 1){
+         getLiveData1_4(deviceId,res);
+      }
+      if(unitId == 2){
+         getLiveData2_4(deviceId,res);
+      }    
       break;
    case 14:
       getLiveData_14(deviceId,res);
@@ -1588,9 +1627,7 @@ function getLiveData1_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      liveData.unit1 = machines;
-      getLiveData2_4(deviceId,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 function getLiveData2_4(deviceId,res) {
@@ -1618,8 +1655,7 @@ function getLiveData2_4(deviceId,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      liveData.unit2 = machines; 
-      res.jsonp(liveData);
+      res.jsonp(machines);
    });
 }
 function getLiveData_14(deviceId,res) {
@@ -1687,12 +1723,19 @@ exports.getAvgFlowByHour = function(req,res,next,id){
   var year_input = parseInt(req.param('year'));
   var month_input = parseInt(req.param('month'));
   var day_input = parseInt(req.param('day'));
-  var deviceId = parseInt(req.param('dIdFlow'));
+  var machineId = req.param('dIdFlow');
+  var tempId = machineId;
+  var deviceId = parseInt(tempId.split("_")[0]);
+  var unitId = tempId.split("_")[1];
   console.log("Param inputs Avg Flow"+year_input,month_input,day_input,deviceId);
   switch(deviceId){
     case 4:
-      getAvgFlowByHour1_4(deviceId,year_input,month_input,day_input,res);
-     
+      if(unitId == 1){
+         getAvgFlowByHour1_4(deviceId,year_input,month_input,day_input,res);
+      }
+       if(unitId == 2){
+         getAvgFlowByHour2_4(deviceId,year_input,month_input,day_input,res);
+      }  
       break;
    case 14:
       getAvgFlowByHour_14(deviceId,year_input,month_input,day_input,res);
@@ -1734,9 +1777,7 @@ function  getAvgFlowByHour1_4(deviceId,year_input,month_input,day_input,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      avgFlowByHourData.unit1 = machines;
-      getAvgFlowByHour2_4(deviceId,year_input,month_input,dat_input,res); 
-      //res.jsonp(machines);
+      res.jsonp(machines);
    });
 }
 function  getAvgFlowByHour2_4(deviceId,year_input,month_input,day_input,res) {
@@ -1770,8 +1811,7 @@ function  getAvgFlowByHour2_4(deviceId,year_input,month_input,day_input,res) {
         } else if (!machines) {
         return next(new Error('Failed to load Machine '));
       }
-      avgFlowByHourData.unit2 = machines; 
-      res.jsonp(avgFlowByHourData);
+      res.jsonp(machines);
    });
 }
 function  getAvgFlowByHour_14(deviceId,year_input,month_input,day_input,res) {

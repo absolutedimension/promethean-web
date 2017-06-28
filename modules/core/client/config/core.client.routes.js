@@ -18,12 +18,12 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
       templateUrl: 'modules/core/client/views/home.client.view.html'
     })
     .state('historic-chart', {
-      url: '/historic-chart/:machineName/:location/:machineId',
+      url: '/historic-chart/:machineName/:location/:machineId/:unitId',
       templateUrl: 'modules/core/client/views/machine.chart.view.html'
       // controller:'modules/core/client/controllers/machine.chart.controller.js'
     })
      .state('live', {
-      url: '/live/:machineName/:location/:machineId',
+      url: '/live/:machineName/:location/:machineId/:unitId',
       templateUrl: 'modules/core/client/views/machine.live.view.html',
      // controller:'modules/core/client/controllers/machine.chart.controller.js'
     })

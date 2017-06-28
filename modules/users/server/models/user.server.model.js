@@ -38,7 +38,8 @@ var MachineDetail  = new Schema({
     type:Number
   },
    unitId :{
-    type:String
+    type:Number,
+    default:0
   },
   machineDetail:{
     title1:{title:{type:String},value:{type:String}},

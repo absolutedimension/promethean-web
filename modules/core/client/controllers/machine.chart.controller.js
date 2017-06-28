@@ -6,7 +6,9 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
       var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
       var year=0;
      
-      var deviceId = $state.params.machineId;
+      var deviceIdTemp = $state.params.machineId;
+      var unitId = $state.params.unitId;
+      var deviceId = deviceIdTemp+"_"+unitId;
       var yearSelected = 2017;
       
      $scope.seriesData = [];

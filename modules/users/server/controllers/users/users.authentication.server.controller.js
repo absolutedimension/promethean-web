@@ -71,7 +71,7 @@ exports.adminsignup = function (req, res) {
   user.username = user.email;
 
   // Then save the user
-  user.save(function (err) {
+  user.save(function (err,response) {
     if (err) {
        console.log("Error in Signup :"+ errorHandler.getErrorMessage(err));
       return res.status(400).send({
@@ -92,7 +92,7 @@ exports.adminsignup = function (req, res) {
     }
   });
 };
-
+var isCompanyExists = false;
 exports.signupUser = function(req , res , next){ 
   //var userEmails = req.body;
   var newUsers = req.body.newUsers;
@@ -100,11 +100,6 @@ exports.signupUser = function(req , res , next){
   var companyDetailUser = req.body.companyDetailUser;
   var message = null;
   console.log("incoming Object for sign up :"+newUsers.length,userEmails.length,JSON.stringify(companyDetailUser) );
-  //Add missing user fields
-  // newUser.provider = 'local';
-  // newUser.displayName = newUser.firstName + ' ' + newUser.lastName;
-  // newUser.username = newUser.email;
-
   var companyDetail = new MachineDetail();
   companyDetail.companyName = companyDetailUser.companyName;
   companyDetail.machineName = companyDetailUser.machineName;
@@ -112,55 +107,62 @@ exports.signupUser = function(req , res , next){
   companyDetail.machineId = companyDetailUser.machineId;
   companyDetail.unitId = companyDetailUser.unitId;
   console.log("Machine detail :"+JSON.stringify(companyDetail));
-  //saveNewUser(user,res);
-  companyDetail.save(function(err){
-      if (err) {
-       console.log("Error in Company Detail :"+ errorHandler.getErrorMessage(err));
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });    
-    }
-    if(userEmails.length !== 0){
-       updateExistingUsers(userEmails,companyDetail,res);
-     }
-
-  });
- //res.jsonp(user);
+  checkCompanyExistance(newUsers,companyDetail,userEmails,companyDetailUser,res);
 }
+
+function checkCompanyExistance(newUsers,companyDetail,userEmails,companyDetailUser,res){
+    MachineDetail.find({machineId:companyDetail.machineId,unitId:companyDetail.unitId}).limit(1).exec(function(err,response){
+       if (err) {
+          console.log("Error in Finding Users :"+ errorHandler.getErrorMessage(err));
+            return res.status(400).send({
+            message: errorHandler.getErrorMessage(err)
+        });    
+      } 
+      console.log("The findOne result is "+response);
+      if(!isBlank(response)){
+          console.log("Inside Response");
+          updateExistingUsers(userEmails,companyDetailUser,res);    
+      } else {
+         companyDetail.save(function(err){
+              if (err) {
+                console.log("Error in Company Detail :"+ errorHandler.getErrorMessage(err));
+                return res.status(400).send({
+                  message: errorHandler.getErrorMessage(err)
+                });    
+              }
+              if(userEmails[0] !== undefined){
+                updateExistingUsers(userEmails,companyDetail,res);
+              } else {
+                saveNewUsers(newUsers,companyDetail,userEmails,res)
+              }
+          });
+        }
+    });
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
 
 function saveNewUsers(newUsers,companyDetail,userEmails,res){
   console.log("New user before save :"+JSON.stringify(newUsers[0]));
-  async.eachSeries(newUsers, function(person, asyncdone) {
-    var newUser = new User(person);
-    newUser.save(asyncdone);
-      }, function(err,user) {
-        if (err) {
+  var newUser = new User(newUsers[0]);
+  newUser.save(function(err,response){
+    if (err) {
           console.log("New User Save :"+ errorHandler.getErrorMessage(err));
           return res.status(400).send({
             message: errorHandler.getErrorMessage(err)
           });    
         }
-       console.log("New Users Created "+user)
-        if(userEmails.length !== 0){
-          updateNewUsers(userEmails,companyDetail,res);
-        }
-    });
+        console.log("User saved "+response.data);
+  });
+
 }
 
 function updateExistingUsers(userExistingEmails,companyDetail,res){
    // Then save the user
   console.log("Company Detail Before Updating Emails"+userExistingEmails[0],userExistingEmails[1]); 
-  // User.update({'email':userExistingEmails[0]},{$set:{machineAllocated:companyDetail}},function(err,response){
-  //     if (err) {
-  //         console.log("Error in Updating Users :"+ errorHandler.getErrorMessage(err));
-  //         return res.status(400).send({
-  //           message: errorHandler.getErrorMessage(err)
-  //       });    
-  //     } 
-  //     res.jsonp(response);
-  // });
-
-
 
   User.update({username:{$in:userExistingEmails}},{$push:{machineAllocated:companyDetail}},{multi:true}).exec(function(err,response){
         if (err) {

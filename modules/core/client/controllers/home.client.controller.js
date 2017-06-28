@@ -29,6 +29,7 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','$sta
     }
 
     $scope.goToCharts = function(machine){
+      //alert("Machine values :"+JSON.stringify(machine));
       $state.go('live',machine);
     }
 

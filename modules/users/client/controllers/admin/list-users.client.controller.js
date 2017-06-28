@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users.admin').controller('UserListController', ['$scope','$http', '$filter','$modal', 'Admin',
-  function ($scope,$http, $filter,$modal, Admin,User,MachineDetail) {
+angular.module('users.admin').controller('UserListController', ['$scope','$http','$state', '$filter','$modal','$mdToast', 'Admin',
+  function ($scope,$http,$state, $filter,$modal,$mdToast, Admin,User,MachineDetail) {
     Admin.query(function (data) {
       $scope.users = data;
       $scope.buildPager();
@@ -89,23 +89,26 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
         companyDetailUser:{}
       }
 
-   // alert("User  :"+$scope.user);
     $scope.addUserInfo = function(){
       $scope.companyDetail.machineName = angular.element('#machineName').val();
       $scope.companyDetail.companyName = angular.element('#companyName').val();
       $scope.companyDetail.location = angular.element('#location').val();
       $scope.companyDetail.machineId = angular.element('#machineId').val();
       $scope.companyDetail.unitId = angular.element('#unitId').val();
-      //signUpObject.newUsers  = newUserObjects;
+
       signUpObject.userEmails = existingUsersEmail;
+     
       signUpObject.companyDetailUser =  $scope.companyDetail;
+     
+     
       alert("Before post  :-"+JSON.stringify($scope.companyDetail));
-      //$scope.newUser.machineAllocated.push($scope.companyDetail);
+     
       $http.post('/api/auth/signupUser',signUpObject).then(function(response){
-          alert("User Saved "+response.data);
+          addMachineModal.close();
+          $scope.showActionToast();        
         }).catch(function(response){
-          $scope.error = response.data;
-        alert("Couldn't save :"+response);
+          $scope.error = response.data.message;
+          alert("Couldn't save :"+response);
       });
     }
 
@@ -117,10 +120,18 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
     $scope.removable = true;
     
     var selectedUserEmail = [];
-    $scope.selectedDropDown = function(item){
-      //alert(item._id);
+    var companyDetailSaved = false;
+
+    $scope.goToLiveCharts = function(machineObject) {
+       $state.go('live',machineObject);
+    }
+
+    $scope.goToLiveTables = function(machine){
+      $state.go('table',machine);
+    }
+
+    $scope.selectedDropDown = function(item) {
       var existingUsers = item.email;
-       //alert(selectedUserObj);
       if(existingUsersEmail.indexOf(existingUsers) == -1) {
          existingUsersEmail.push(existingUsers);
        }
@@ -128,38 +139,34 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
        signUpObject.userEmails.push(existingUsers);
     }
 
-    $scope.addUserToMachine = function(newUser){    
-      if(newUsers.indexOf(newUser.email) == -1) {
-         newUsers.push(newUser.email);
-      }
-      $scope.companyDetail.machineName = angular.element('#machineName').val();
-      $scope.companyDetail.companyName = angular.element('#companyName').val();
-      $scope.companyDetail.location = angular.element('#location').val();
-      $scope.companyDetail.machineId = angular.element('#machineId').val();
-      $scope.companyDetail.unitId = angular.element('#unitId').val();
-      newUser.provider = 'local';
-      newUser.username = newUser.email;
-      newUser.machineAllocated.push($scope.companyDetail);
+    $scope.addUserToMachine = function(newUser)   {    
+        if(newUsers.indexOf(newUser.email) == -1) {
+          newUsers.push(newUser.email);
+        }
+        $scope.companyDetail.machineName = angular.element('#machineName').val();
+        $scope.companyDetail.companyName = angular.element('#companyName').val();
+        $scope.companyDetail.location = angular.element('#location').val();
+        $scope.companyDetail.machineId = angular.element('#machineId').val();
+        $scope.companyDetail.unitId = angular.element('#unitId').val();
+        newUser.provider = 'local';
+        newUser.username = newUser.email;
+        newUser.machineAllocated.push($scope.companyDetail);
+        signUpObject.companyDetailUser =  $scope.companyDetail;
+        signUpObject.newUsers.push(newUser);
 
-      $http.post('api/auth/signup',newUser).then(function(response){
-          alert("User Saved :"+response.data);
-      }).catch(function(response){
-           alert("User  Not Saved :"+response.data);
-      });
-      //newUserObjects.push(newUser);
-     // signUpObject.newUsers.push(newUser);
-      $scope.selectedUser =  newUsers;
-      // $scope.selectedUser = $scope.newUsers.concat($scope.existingUsers);
+        $http.post('api/auth/signupUser',signUpObject).then(function(response){
+          companyDetailSaved = true;
+        }).catch(function(response){
+          $scope.error = response.data.message;
+            alert("User  Not Saved :"+response);
+        });
+        $scope.selectedUser =  newUsers;     
     }
 
     
-
-    function addMachineToExistingUsers(){
-
-    }
-  
+    var addMachineModal = null;
     $scope.addMachines = function(){
-         $modal.open({
+          addMachineModal = $modal.open({
           animation: true,
           templateUrl: './modules/users/client/views/admin/add-machine.client.view.html',
           controller: 'UserListController',
@@ -167,14 +174,16 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
         });
     }
 
-     $scope.editMachines = function(machineData){
-        alert("Machine Data :"+JSON.stringify(machineData));
+     $scope.editMachines = function(userToEdit){
+       alert("User Data :"+JSON.stringify(userToEdit));
+      
          $modal.open({
           animation: true,
-          templateUrl: './modules/users/client/views/admin/add-machine.client.view.html',
+          templateUrl: './modules/users/client/views/admin/edit-user.client.view.html',
           controller: 'UserListController',
           windowClass:'user-modal-window'
         });
+         $scope.userToEdit = userToEdit;
     }
 
     $scope.getMachines = function(){
@@ -189,30 +198,62 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
       
     });
 
-   
+    //Code for toast
+        var last = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
 
-    $scope.openCity = function(evt, cityName) {
-         // Declare all variables
-          var i, tabcontent, tablinks;
+      $scope.toastPosition = angular.extend({},last);
 
-          // Get all elements with class="tabcontent" and hide them
-          tabcontent = angular.element('document').getElementsByClassName("tabcontent");
-          for (i = 0; i < tabcontent.length; i++) {
-              tabcontent[i].style.display = "none";
+      $scope.getToastPosition = function() {
+        sanitizePosition();
+
+        return Object.keys($scope.toastPosition)
+          .filter(function(pos) { return $scope.toastPosition[pos]; })
+          .join(' ');
+      };
+
+      function sanitizePosition() {
+        var current = $scope.toastPosition;
+
+        if ( current.bottom && last.top ) current.top = false;
+        if ( current.top && last.bottom ) current.bottom = false;
+        if ( current.right && last.left ) current.left = false;
+        if ( current.left && last.right ) current.right = false;
+
+        last = angular.extend({},current);
+      }
+
+      $scope.showSimpleToast = function() {
+        var pinTo = $scope.getToastPosition();
+
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent('Simple Toast!')
+            .position(pinTo )
+            .hideDelay(3000)
+        );
+      };
+
+      $scope.showActionToast = function() {
+        var pinTo = $scope.getToastPosition();
+        var toast = $mdToast.simple()
+          .textContent('User Saved')
+          .action('UNDO')
+          .highlightAction(true)
+          .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
+          .position(pinTo);
+
+        $mdToast.show(toast).then(function(response) {
+          if ( response == 'ok' ) {
+            alert('You clicked the \'UNDO\' action.');
           }
-
-          // Get all elements with class="tablinks" and remove the class "active"
-          tablinks = angular.element('document').getElementsByClassName("tablinks");
-          for (i = 0; i < tablinks.length; i++) {
-              tablinks[i].className = tablinks[i].className.replace(" active", "");
-          }
-
-          // Show the current tab, and add an "active" class to the link that opened the tab
-          angular.element('document').getElementById(cityName).style.display = "block";
-          evt.currentTarget.className += " active";
+      });
     }
 
-
-
+//Code for toast ends
   }
 ]);

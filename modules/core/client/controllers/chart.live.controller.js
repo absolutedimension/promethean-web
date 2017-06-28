@@ -22,7 +22,9 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     $scope.dataD2 = [];
     $scope.currentTab = 'live';
 
-    var deviceId = $state.params.machineId;
+    var deviceIdTemp = $state.params.machineId;
+    var unitId = $state.params.unitId;
+    var deviceId = deviceIdTemp+"_"+unitId;
 
     $scope.machineObject = $state.params;
 

@@ -126,3 +126,12 @@ div.tab button.active {
   font-size: 16px;
   color: blue;
 }
+#stats{
+  opacity: 0.3;
+}
+#tableIcon{
+  opacity: 0.3;
+}
+#editIcon{
+  opacity: 0.3;
+}

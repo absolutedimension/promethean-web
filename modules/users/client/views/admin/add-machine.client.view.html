@@ -2,7 +2,7 @@
      <div class="row" style="margin: 20px" >
          <span style="font-size: 20px;color: #333333">ADD USER</span>
          <hr style="margin-top: 5px;margin-bottom: 7px"></hr> 
-        <form name="userForm" class="form-inline"  ng-submit="addUser(userForm.$valid)" novalidate>
+        <form name="userForm" class="form-inline"  novalidate>
             <fieldset>
                 <div style="position: relative;height: 40px;margin-top: 20px">
                    <span style="font-size: 18px;color: #666666">COMPANY DETAILS</span>
@@ -21,7 +21,12 @@
                  </div>
                   <div style="position: relative;height: 40px;">
                     <span style="position: absolute;top:10px">Unit Id </span>
-                    <input id="unitId" type="text" ng-model="companydetail.unitId" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
+                    <select id="unitId" type="text" ng-model="companydetail.unitId" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
                  </div>
                  <!--<button ng-click="uploadMachineImage">Upload Machine Image</button> -->
                   <div style="position: relative;height: 40px;">
