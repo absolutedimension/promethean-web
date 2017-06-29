@@ -118,8 +118,11 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
 
                 yAxis: {
                     title: {
-                        text: 'Average flow'
+                        text: 'Average Temp'
                     }
+                },
+                title: {
+                    text: 'Water/Oil Temp(Past Hour)'
                 },
                 legend: {
                     layout: 'vertical',
@@ -130,6 +133,12 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                 plotOptions: {
                     series: {
                         pointStart: 0
+                    }
+                },
+                 xAxis:{
+                    type:"category",
+                    title: {
+                        text: 'Last One Hour'
                     }
                 },
 

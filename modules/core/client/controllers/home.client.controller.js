@@ -5,6 +5,8 @@ angular.module('core').controller('HomeController', ['$scope','$rootScope','$sta
     // This provides Authentication context.
     $scope.authentication = Authentication;
 
+    $scope.loggedInUser = $scope.authentication.user;
+
     //$scope.machines = [{},{},{},{}];
 
     if(!$scope.authentication.user){

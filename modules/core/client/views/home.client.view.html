@@ -1,9 +1,11 @@
-<div ng-controller="HomeController" style="background-color: #fbfcfd;height: 620px;top: 4px;position: relative;">
-  <div style="position: relative;width: 100%;height: 170px" >
+<div ng-controller="HomeController" class="col-md-12" style="background-color: #fbfcfd;height: 620px;top: 4px;position: relative">
+  <h3><span style="color: #666">Hi {{loggedInUser.firstName}} ,here is your list of machines.</span></h3>
+  <div style="position: relative;width: 100%;height: 90px" >
       <input id="deviceSearch" type="text" autocomplete="true" ng-model="searchText" placeholder="Search"/>   
   </div>
-    <div  style="position: relative;width: 100%" >
-        <div class="col col-xs-6"  ng-repeat="machine in authentication.user.machineAllocated | filter:searchText" style="left:10%;width: 45%" ng-init="getTablesName()">
+    <!--<div  style="position: relative;width: 100%" >-->
+      <div class='md-padding' layout="row" layout-wrap style="margin-top: 30px;height: 100%;margin-left: 20%">
+        <div   ng-repeat="machine in authentication.user.machineAllocated | filter:searchText" style="left:10%;width: 50%" ng-init="getTablesName()">
           <div class="padded" md-whiteframe="{{height}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center" ng-click="goToCharts(machine)" 
                   ng-init="height = 3" ng-mouseenter="height = 6" ng-mouseleave="height = 3" style="width: 300px;height: 110px;margin: 10px">             
                 <table style="width: 100%;height: 100%;background: white">
@@ -22,11 +24,11 @@
                       <span style="color: #666;font-size: 16px">Unit Id : {{machine.unitId}}</span>
                       
                     </td>
-                    <td style="height: 100%">
+                    <!--<td style="height: 100%">
                       <div style="height: 100%;background: orange">
                         <img ng-src="/modules/core/client/img/right.png" style="width: 24px;height: 24px;position: absolute;top: 42%;margin-left: 5px;"/>
                       </div>
-                    </td>
+                    </td>-->
                   </tr>
               </table>
           </div>

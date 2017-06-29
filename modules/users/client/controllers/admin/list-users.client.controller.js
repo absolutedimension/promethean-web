@@ -70,7 +70,7 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
     }
     
     $scope.chipsChanged = function(chip){
-      alert("Inside Chips change :"+chip);
+     // alert("Inside Chips change :"+chip);
       for(var i=0; newUsers.length ; i++){
         if(newUsers[i].email == chip){
           newUsers.splice(i,1);
@@ -101,14 +101,14 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
       signUpObject.companyDetailUser =  $scope.companyDetail;
      
      
-      alert("Before post  :-"+JSON.stringify($scope.companyDetail));
+     // alert("Before post  :-"+JSON.stringify($scope.companyDetail));
      
       $http.post('/api/auth/signupUser',signUpObject).then(function(response){
-          addMachineModal.close();
+          $scope.addMachineModal.close();
           $scope.showActionToast();        
         }).catch(function(response){
           $scope.error = response.data.message;
-          alert("Couldn't save :"+response);
+         // alert("Couldn't save :"+response);
       });
     }
 
@@ -158,15 +158,15 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
           companyDetailSaved = true;
         }).catch(function(response){
           $scope.error = response.data.message;
-            alert("User  Not Saved :"+response);
+            //alert("User  Not Saved :"+response);
         });
         $scope.selectedUser =  newUsers;     
     }
 
     
-    var addMachineModal = null;
+   
     $scope.addMachines = function(){
-          addMachineModal = $modal.open({
+          $scope.addMachineModal = $modal.open({
           animation: true,
           templateUrl: './modules/users/client/views/admin/add-machine.client.view.html',
           controller: 'UserListController',
@@ -175,7 +175,7 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
     }
 
      $scope.editMachines = function(userToEdit){
-       alert("User Data :"+JSON.stringify(userToEdit));
+       //alert("User Data :"+JSON.stringify(userToEdit));
       
          $modal.open({
           animation: true,

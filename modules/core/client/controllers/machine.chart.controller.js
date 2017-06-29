@@ -79,7 +79,7 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
           $state.go('live',$stateParams);
       }
 
-    
+    $scope.isFlowContainerVisible = false;
     //var dataByDay = null;
      $scope.daySeries = [];
      function getDataByDay(monthClicked) {
@@ -101,22 +101,22 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                 // seriesDrillDown.name  = months[month-1];
                 // seriesDrillDown.id  = months[month-1];
               
-                tempData.name = dataByDay[i]._id;
+                tempData.name = "Day "+dataByDay[i]._id;
                 tempData.y = dataByDay[i].totalEnergy;
-                tempData.drilldown = dataByDay[i]._id;
+                tempData.drilldown = "Day "+dataByDay[i]._id;
 
                 seriesDrillDown.data[i] = tempData;
 
                 //Push reference for drilldown id
                 referenceData.id =  dataByDay[i]._id.toString();
 
-                inside_data[0] = dataByDay[i]._id.toString();
+                inside_data[0] = "Day "+dataByDay[i]._id.toString();
                 inside_data[1] =  dataByDay[i].totalEnergy;
                 
                 referenceData.data.push(inside_data);//dataByDay[i]._id.toString();
                 //referenceData.data[1] = dataByDay[i].totalEnergy;
 
-                $scope.daySeries.push(dataByDay[i]._id);            
+                //$scope.daySeries.push(dataByDay[i]._id);            
               
                 // $scope.finalDrilldownData.push(seriesDrillDown);
                 $scope.finalDrilldownData.push(referenceData);
@@ -214,13 +214,13 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                       $scope.isTableVisible = true;  
                       //prepareCarouselData();
                      if( $scope.drilldownCompleted ) {
-                         pupulateLineChart(e.point.name);
-                         getAverageFlowValue(e.point.name);
+                         pupulateLineChart(e.point.name.split(" ")[1]);
+                         getAverageFlowValue(e.point.name.split(" ")[1]);
 
                         // $timeout(populateFlowChart,2000);
                         // return;
                      } else {
-                        
+                        $scope.monthClicked = e.point.name;
                          
                      }
                               
@@ -232,7 +232,8 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                 },
                 drillupall:function(e){
                     $scope.drilldownCompleted = false;
-                    $scope.isTableVisible = false; 
+                    $scope.isTableVisible = false;
+                    $scope.isFlowContainerVisible = false; 
                 }
             }
             },
@@ -242,12 +243,15 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
             // subtitle: {
             //     text: 'Promethean'
             // },
+            // xAxis: {
+            //     categories:$scope.monthSeries
+            // },
             xAxis: {
-                categories:$scope.monthSeries
+                type: "category"
             },
             yAxis: {
                 title: {
-                    text: '<b>TOTAL ENERGY(Kcal)</b>'
+                    text: '<b> TOTAL ENERGY ( kcal )</b>'
                 }
 
             },
@@ -296,7 +300,8 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
 }  
 
 function pupulateLineChart(dayClicked){
-    $http.get('api/machinesData/getDataByHour/'+deviceId+"/"+yearSelected+"/"+6+"/"+dayClicked).then(
+    var monthInNumbers = months.indexOf($scope.monthClicked) + 1;
+    $http.get('api/machinesData/getDataByHour/'+deviceId+"/"+yearSelected+"/"+monthInNumbers+"/"+dayClicked).then(
         function(response){
             addLineChart(response.data);
         }
@@ -307,22 +312,28 @@ function pupulateLineChart(dayClicked){
 $scope.goToMonths = function(){
     $( ".containerChart" ).remove();
     $( ".flowContainer" ).remove();
-    $scope.isTableVisible = false; 
+    $scope.isTableVisible = false;
+    $scope.isFlowContainerVisible = false;
    showCharts();
    $scope.drilldownCompleted = false; 
+   
 }
 
-$scope.dataD0_hour = [];
-$scope.dataD1_hour = [];
-$scope.dataD2_hour = [];
+
 var highChart= null;
 $scope.isBackButtonVisible = false;
+ $scope.startPoint = 0;
 function addLineChart(responseData){
+    $scope.isFlowContainerVisible = true;
+    $scope.dataD0_hour = [];
+    $scope.dataD1_hour = [];
+    $scope.dataD2_hour = []; 
     for (var i = 0 ; i < responseData.length ; i++) {
         $scope.dataD0_hour.push(responseData[i].avg_d0);
         $scope.dataD1_hour.push(responseData[i].avg_d1);
         $scope.dataD2_hour.push(responseData[i].avg_d2);
     }
+    $scope.startPoint = responseData[0]._id;
     $( ".containerChart" ).remove();
     $scope.isBackButtonVisible = true;
      //Line Chart Starts
@@ -330,18 +341,27 @@ function addLineChart(responseData){
 
                 yAxis: {
                     title: {
-                        text: 'Average flow'
+                        text: 'Average Temp'
                     }
+                },
+                title: {
+                    text: 'Water/Oil Temp(Hourly)'
                 },
                 legend: {
                     layout: 'vertical',
                     align: 'right',
                     verticalAlign: 'middle'
                 },
+                xAxis:{
+                    type:"category",
+                    title: {
+                        text: 'Hours of the Day'
+                    }
+                },
 
                 plotOptions: {
                     series: {
-                        pointStart: 0
+                        pointStart: $scope.startPoint
                     }
                 },
 
@@ -394,7 +414,7 @@ function addLineChart(responseData){
         }
     },
     series: [{
-        name: 'Avg Flow',
+        name: 'Hour of the Day',
         data: $scope.averageFlowValue//[49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
 
     }
@@ -411,11 +431,11 @@ function addLineChart(responseData){
     set3 = {},
     set4 = {},
     set5 = {};
-$scope.chartClickData = [set1,set2,set3,set4,set5];
-var averageDvalues = {avg_d0:null,avg_d1:null,avg_d2:null};
+ var chartClickSet = [];
+ var averageDvalues = {avg_d0:null,avg_d1:null,avg_d2:null};
  var tempJson = {day:[],totalEnergy:[]};
 
-  $timeout(prepareCarouselData,2500);  
+  $timeout(prepareCarouselData,4000);  
 
 function prepareCarouselData(){
    // alert("Inside"+dataByDay.length );
@@ -432,6 +452,9 @@ function prepareCarouselData(){
             // alert(JSON.stringify(set1));
 
          }
+         if(set1.length !== 0 ){
+             chartClickSet.push(set1);
+         }
          if(i > 7 && i <= 14){
               tempJson.day[i] = $scope.dataBydayTable[i]._id;
              averageDvalues.avg_d0 = $scope.dataBydayTable[i].avg_d0;
@@ -441,6 +464,9 @@ function prepareCarouselData(){
              set2 = tempJson;
 
         }
+        if(set2.length !== 0 ){
+             chartClickSet.push(set2);
+         }
          if(i > 14 && i <= 22){
               tempJson.day[i] = $scope.dataBydayTable[i]._id;
              averageDvalues.avg_d0 = $scope.dataBydayTable[i].avg_d0;
@@ -450,6 +476,9 @@ function prepareCarouselData(){
             set3 = tempJson;
 
         }
+         if(set3.length !== 0 ){
+             chartClickSet.push(set3);
+         }
         if(i > 22 && i <= 29){
              tempJson.day[i] = $scope.dataBydayTable[i]._id;
              averageDvalues.avg_d0 = $scope.dataBydayTable[i].avg_d0;
@@ -459,6 +488,9 @@ function prepareCarouselData(){
              set4 = tempJson;
 
         }
+         if(set4.length !== 0 ){
+             chartClickSet.push(set4);
+         }
         if(i > 29 && i < 32){
              tempJson.day[i] = $scope.dataBydayTable[i]._id;
              averageDvalues.avg_d0 = $scope.dataBydayTable[i].avg_d0;
@@ -468,9 +500,13 @@ function prepareCarouselData(){
              set5 = tempJson;
 
         }
+         if(set5.length !== 0 ){
+             chartClickSet.push(set5);
+         }
         
     }
-    $scope.chartClickData = [set1,set2,set3,set4,set5];
+   // alert("Length table :"+$scope.chartClickData.length);
+    $scope.chartClickData = chartClickSet;
     
 }
 //addCarouselDirective();

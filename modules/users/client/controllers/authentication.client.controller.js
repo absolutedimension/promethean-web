@@ -65,9 +65,9 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
         $scope.error = response.data.message;
       });
     };
-
+      var adminModal = null;
       $scope.addAdminSignup = function(){
-         $modal.open({
+          $scope.adminModal = $modal.open({
           animation: true,
           templateUrl: './modules/users/client/views/admin/admin.signup.client.html',
           controller: 'AuthenticationController',
@@ -77,12 +77,10 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
 
      $scope.doAdminSignup = function(adminUser){
      // alert("User brforwe "+JSON.stringify(adminUser));
-      $http.post('api/auth/adminsignup',adminUser).then(function(err,response){
-        if(err){
-          alert("Err "+err.message);
-          return;
-        }
-           alert("User Created");
+      $http.post('api/auth/adminsignup',adminUser).then(function(response){    
+           $scope.adminModal.close();
+      }).catch(function(response){
+           $scope.error = response.data.message;
       });
     }
 

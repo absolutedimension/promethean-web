@@ -31,26 +31,6 @@
                         </ul>
                     </td>
                 </tr>
-                <!--<tr>
-                    <td>
-                        <span>Send Entire Report</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span>Email</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span>Copy Link</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span>Save as PDF</span>
-                    </td>
-                </tr>-->
             </table>         
         </div>
     </div>
@@ -64,12 +44,12 @@
              <md-progress-circular md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
         </div>
         </div>
-        <div id="flowContainer" style="height: 200px;box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+        <div id="flowContainer" ng-show="{{isFlowContainerVisible}}" style="height: 200px;box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
         </div>
     </div>
-    <div id="carouselContainer" class="col-md-3" style="top:20px;width: 30%" ng-show="isTableVisible == true?true:false">
+    <div id="carouselContainer" class="col-md-3" style="top:20px;width: 30%;height: 400px" ng-controller="MachineChartController">
         <div id="dataCarousel" class="carousel" data-flickity='{ "groupCells": false }' 
-            style="background: white;margin: -20px" ng-controller="MachineChartController">
+            style="margin: -20px" >
             <div ng-repeat="chartData in chartClickData" >
                 <div id='dataResultCard' style='width:320px;max-width:100%;position: relative; border: 1px solid #e2e2e2;margin:10px;border-radius: 5px'>   
                     <table class="table table-bordered table-striped">
@@ -119,7 +99,7 @@
                             <th sortable="placed" class="sortable">
                                 Day {{chartData.day[4]}}
                             </th>
-                        <td>{{chartData.totalEnergy[4].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData.totalEnergy[4].avg_d0.toFixed(2)}}</td>
                             <td>{{chartData.totalEnergy[4].avg_d1.toFixed(2)}}</td>
                             <td>{{chartData.totalEnergy[4].avg_d2.toFixed(2)}}</td>
                     </tr>
@@ -158,8 +138,9 @@
                 </div>
             </div>
         </div>
-   <!-- End carousel -->     
+   <!-- End carousel -->    
+   <script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script> 
     </div>    
     </div>
 </div>   
-<script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>
+
