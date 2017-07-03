@@ -1,47 +1,126 @@
-<div id="dataCarousel" class="carousel" data-flickity='{ "groupCells": false }' 
-     style="background: white;margin: -20px" ng-controller="MachineChartController">
-    <div ng-repeat="chartData in chartClickData" >
-        <div id='dataResultCard' 
-            style='width:608px;height:200px;max-width:100%;position: relative; border: 1px solid #e2e2e2;margin:10px;border-radius: 5px' >   
-                <table class="table table-bordered table-striped">
-            <thead>
+<div id="dataCarousel" class="col-md-3" ng-controller="MachineChartController" style="width: 100%">
+  <!--<div id="dataCarousel" 
+              style="margin: -20px" >
+                <div ng-repeat="chartData in chartClickData track by $index"  >
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Days</th>
+                            <th>D0</th>
+                            <th>D1</th>
+                            <th>D2</th>
+                        </tr>    
+                        <tr>
+                            <th sortable="code" class="sortable">
+                                Day {{chartData[0].day[0]}}
+                            </th>
+                            <td>{{chartData[0].totalEnergy[0].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[0].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[0].avg_d2.toFixed(2)}}</td>
+                        </tr>
+                        <tr>
+                            <th sortable="placed" class="sortable">
+                                Day {{chartData[0].day[1]}}
+                            </th>
+                            <td>{{chartData[0].totalEnergy[1].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[1].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[1].avg_d2.toFixed(2)}}</td>
+                       </tr>
+                      </tr>
+                      <tr>
+                            <th sortable="placed" class="sortable">
+                                Day {{chartData[0].day[2]}}
+                            </th>
+                        <td>{{chartData[0].totalEnergy[2].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[2].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[2].avg_d2.toFixed(2)}}</td>
+                     </tr>
+                     </tr>
+                    <tr ng-show="chartData[0].day[3] == ''?false:true">     
+                            <th sortable="placed" class="sortable" >
+                                Day {{chartData[0].day[3]}}
+                            </th>
+                            <td>{{chartData[0].totalEnergy[3].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[3].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[3].avg_d2.toFixed(2)}}</td>
+                    </tr>
+                    </tr>
+                    <tr ng-show="chartData[0].day[4] == ''?false:true">     
+                            <th sortable="placed" class="sortable">
+                                Day {{chartData[0].day[4]}}
+                            </th>
+                            <td>{{chartData[0].totalEnergy[4].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[4].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[4].avg_d2.toFixed(2)}}</td>
+                    </tr>
+                    </tr>
+                    <tr ng-show="chartData[0].day[5] == ''?false:true">     
+                            <th sortable="placed" class="sortable">
+                                Day {{chartData[0].day[5]}}
+                            </th>
+                            <<td>{{chartData[0].totalEnergy[5].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[5].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[5].avg_d2.toFixed(2)}}</td>
+                    </tr>
+                    </tr>
+                    <tr ng-show="chartData[0].day[6] == ''?false:true">     
+                            <th sortable="placed" class="sortable">
+                                Day {{chartData[0].day[6]}}
+                            </th> 
+                            <td>{{chartData[0].totalEnergy[6].avg_d0.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[6].avg_d1.toFixed(2)}}</td>
+                            <td>{{chartData[0].totalEnergy[6].avg_d2.toFixed(2)}}</td>
+                    </tr>       
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr grid-item>
+                            <td ng-bind="chartData[0].totalEnergy[0]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[1]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[2]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[3]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[4]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[5]"></td>
+                            <td ng-bind="chartData[0].totalEnergy[6]"></td>             
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+          </div>-->
+         <table style="width: 100%;margin-top:10px">
             <tr>
-                <th sortable="code" class="sortable">
-                    Day {{chartData.day[0]}}
-                </th>
-                <th sortable="placed" class="sortable">
-                    Day {{chartData.day[1]}}
-                </th>
-                <th sortable="placed" class="sortable">
-                    Day {{chartData.day[2]}}
-                </th>
-                <th sortable="placed" class="sortable">
-                    Day {{chartData.day[3]}}
-                </th>
-                <th sortable="placed" class="sortable">
-                    Day {{chartData.day[4]}}
-                </th>
-                    <th sortable="placed" class="sortable">
-                    Day {{chartData.day[5]}}
-                </th>
-                <th sortable="placed" class="sortable">
-                    Day {{chartData.day[6]}}
-                </th>           
+                <td style="width: 17%;color: #004aac;font-weight: bold;font-size: 16px">
+                   Days
+                </td>
+                <td style="color: #004aac;font-weight: bold;font-size: 16px">
+                   D0(°C)
+                </td>
+                <td style="color: #004aac;font-weight: bold;font-size: 16px">
+                   D1(°C)
+                </td>
+                <td style="color: #004aac;font-weight: bold;font-size: 16px">
+                   D2(°C)
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <tr grid-item>
-                <td ng-bind="chartData.totalEnergy[0]"></td>
-                <td ng-bind="chartData.totalEnergy[1]"></td>
-                <td ng-bind="chartData.totalEnergy[2]"></td>
-                <td ng-bind="chartData.totalEnergy[3]"></td>
-                <td ng-bind="chartData.totalEnergy[4]"></td>
-                <td ng-bind="chartData.totalEnergy[5]"></td>
-                <td ng-bind="chartData.totalEnergy[6]"></td>             
-            </tr>
-            </tbody>
         </table>
-        </div>
-    </div>
+        <hr style="margin-top: 10px;margin-bottom: 5px;"></hr>
+    <div ng-repeat="chartData in chartClickData track by $index">
+        <table style="width: 100%; border-collapse: separate;border-spacing: 1em;">
+            <tr style="border-bottom:1px solid #f5f5f5 ">
+                <td style="color: #999">
+                   {{chartData._id}}
+                </td>
+                <td style="color: #999">
+                    {{chartData.avg_d0.toFixed(2)}}
+                </td>
+                <td style="color: #999">
+                     {{chartData.avg_d1.toFixed(2)}}
+                </td>
+                <td style="color: #999">
+                     {{chartData.avg_d2.toFixed(2)}}
+                </td>
+            </tr>
+        </table>
+    </div>      
 </div>
-    <script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>
+    <!--<script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script>-->

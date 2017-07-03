@@ -50,20 +50,20 @@ a:hover .header-profile-image {
  input[id='deviceSearch'] 
  {
    width: 350px;
-    height: 50px;
+    height: 40px;
     box-sizing: border-box;
     border: 0px;
     border-radius: 4px;
     font-size: 16px;
-    background-color: #f5f5f5;
-    background-image: url(/modules/core/client/img/icons/search_28.png);
+    background-color: #e2e2e2;
+    background-image: url(./modules/core/client/img/icons/search_28.png);
     background-position: right;
     background-repeat: no-repeat;
     padding: 12px 20px 12px 40px;
     -webkit-transition: width 0.4s ease-in-out;
     transition: width 0.4s ease-in-out;
     float: right;
-    top: 10px;
+    top: 50px;
     left: 34.33%;
     position: absolute;
 }
@@ -170,3 +170,47 @@ span:focus{
     margin-top: 15px;
     position: relative;
 }
+#next-arrow{
+  opacity: 0.3;
+}
+#home-card-container {
+  height: 100%;margin-left: 20%;
+}
+#home-card-repeater {
+  left:10%;width: 50%;
+}
+#year-button {
+    background: blue;
+    color: white;
+    font-weight: bold;
+    border-radius: 50px;
+    width: 80px;
+    height: 30px;
+}
+#carouselContainer{
+    width: 30%;height: 400px;
+    overflow-y: auto;overflow-x: hidden;background: white;
+    box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);
+}
+#home-live-img{
+   opacity: 0.3;
+}
+
+#historic-live-img{
+     opacity: 0.3;
+}
+#historic-home-img{
+    opacity: 0.3;
+}
+#mainChartContainer {
+  margin-left: 30px;
+ 
+}
+.login-button{
+    background: #004aac;
+    width: 100px;
+    height: 30px;
+    border-radius: 50px;
+    color: white;
+}
+

@@ -1,5 +1,6 @@
  
  <div style="position: relative;height: 40px;margin-top: 20px" ng-controller="AuthenticationController">
+     
             <span style="font-size: 18px;color: #666666">USER DETAILS</span>
         </div>
         <div style="position: relative;height: 40px;margin-top: 20px">
@@ -17,6 +18,12 @@
         <div style="position: relative;height: 40px;">
         <button  ng-click="doAdminSignup(newUser)" style="float: right;border-radius: 20px;background-color: #08c65b;color: white;width: 75px;height: 25px;border: 0px"> Add User</button>
         </div>
+        <div style="position: relative;height: 40px;">
+            <alert type="danger" ng-show="error" class="text-center text-danger">
+               <span ng-bind="error"></span>
+            </alert>
+        </div>
+        
         <hr></hr>
 
 </div>

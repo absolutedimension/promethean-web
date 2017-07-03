@@ -1,23 +1,29 @@
 
 <div ng-controller="MachineChartController">
-     <div style="height: 55px;background: #fbfcfd;top: 4px;position: relative;" >
-        <ul style="position: absolute;left: 43%">
-            <li ng-repeat="year in tabs" style="list-style: none;float: left">
-                <md-button ng-click="yearSelected(year.title)">{{year.title}}</md-button>
-            </li>
-        </ul>
-     <div>       
-    <div class="row"  ng-init="chartInit()"
-    style="top: 30px;padding-top:30px;position: absolute; width: 100%; background: #fbfcfd;margin-right: 0px;margin-left: 0px">
-   
-    <div class="col-md-3" style="border-right: 1px solid #e2e2e2;width: 15%;height: 580px">
+ <div  id="chartsDiv" class="row"  ng-init="chartInit()" style="top: 55px;padding-top:60px;position: absolute; width: 100%; background: #fbfcfd;margin-right: 0px;margin-left: 0px">
+    <div class="col-md-3" style="border-right: 1px solid #e2e2e2;width: 12%;height: 610px;top: -60px;padding-top: 60px;background: #f5f5f5;">
         <div style="width: 150px; background: #fbfcfd;position: absolute;">
-            <table style="left: 25%;position: absolute; border-collapse: separate;border-spacing: 0 0em;">
+            <table style="position: absolute; border-collapse: separate;border-spacing: 0.5em;left:-20px">
                 <tr>
                      <td>
                         <ul>
                             <li style="list-style-type: none;cursor: pointer">
-                                <a  style="cursor: pointer" ng-click="goToLive()">Live</a>
+                                <a  style="cursor: pointer" ui-sref='home'>
+                                    <img id="historic-home-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/home_default.png"></img>
+                                    <span  style="color: #666">Home</span>        
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                     <td>
+                        <ul>
+                            <li style="list-style-type: none;cursor: pointer">
+                                <a  style="cursor: pointer" ng-click="goToLive()">
+                                     <img id="historic-live-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/live_default.png"></img>
+                                      <span style="color: #666">Live</span> 
+                                </a>
                             </li>
                         </ul>
                     </td>
@@ -25,8 +31,11 @@
                 <tr>
                    <td>
                         <ul>
-                            <li style="color: blue;list-style-type: disc;font-size: 15px">
-                                <a style="color: blue">Historic</a>
+                            <li style="color: #004aac;list-style-type: disc;font-size: 15px">
+                                <a style="color: #004aac">
+                                    <img id="historic-historic-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/historical_clicked.png"></img>
+                                    <span style="color: #004aac">Historical</span> 
+                                </a>
                             </li>
                         </ul>
                     </td>
@@ -34,9 +43,10 @@
             </table>         
         </div>
     </div>
-    <div class="col-md-6" style="margin-left: 30px">
-        <div style="top:-20px;position: absolute">
-            <img id="backImage" style="height: 20px" ng-src="./modules/core/client/img/back.png" ng-click="goToMonths()" ></img>
+    <div id="mainChartContainer" class="col-md-6"  > 
+        <div style="top:-45px;position: absolute">
+            <md-button style="background: #004aac;color: white;border-radius: 50px;font-weight: bold;width: 55px;height: 25px" ng-click="goToMonths()">Back</md-button>
+            <!--<img id="backImage" style="height: 20px" ng-src="./modules/core/client/img/back.png" ng-click="goToMonths()" ></img>-->
         </div>
         <div id="containerChart" style="width: 100%;background: white;height: 365px;
                  box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">    
@@ -44,103 +54,17 @@
              <md-progress-circular md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
         </div>
         </div>
-        <div id="flowContainer" ng-show="{{isFlowContainerVisible}}" style="height: 200px;box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
+        <div id="flowContainer" ng-hide="isFlowContainerVisible == 'false'?true:false"  style="height: 200px;box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
         </div>
     </div>
-    <div id="carouselContainer" class="col-md-3" style="top:20px;width: 30%;height: 400px" ng-controller="MachineChartController">
-        <div id="dataCarousel" class="carousel" data-flickity='{ "groupCells": false }' 
-            style="margin: -20px" >
-            <div ng-repeat="chartData in chartClickData" >
-                <div id='dataResultCard' style='width:320px;max-width:100%;position: relative; border: 1px solid #e2e2e2;margin:10px;border-radius: 5px'>   
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                        <tr>
-                            <th>Days</th>
-                            <th>D0</th>
-                            <th>D1</th>
-                            <th>D2</th>
-                        </tr>    
-                        <tr>
-                            <th sortable="code" class="sortable">
-                                Day {{chartData.day[0]}}
-                            </th>
-                            <td>{{chartData.totalEnergy[0].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[0].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[0].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    <tr>
-                            <th sortable="placed" class="sortable">
-                                Day {{chartData.day[1]}}
-                            </th>
-                            <td>{{chartData.totalEnergy[1].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[1].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[1].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    </tr>
-                    <tr>
-                            <th sortable="placed" class="sortable">
-                                Day {{chartData.day[2]}}
-                            </th>
-                        <td>{{chartData.totalEnergy[2].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[2].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[2].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    </tr>
-                    <tr ng-show="chartData.day[3] == ''?false:true">     
-                            <th sortable="placed" class="sortable" >
-                                Day {{chartData.day[3]}}
-                            </th>
-                            <td>{{chartData.totalEnergy[3].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[3].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[3].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    </tr>
-                    <tr ng-show="chartData.day[4] == ''?false:true">     
-                            <th sortable="placed" class="sortable">
-                                Day {{chartData.day[4]}}
-                            </th>
-                            <td>{{chartData.totalEnergy[4].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[4].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[4].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    </tr>
-                    <tr ng-show="chartData.day[5] == ''?false:true">     
-                            <th sortable="placed" class="sortable">
-                                Day {{chartData.day[5]}}
-                            </th>
-                            <<td>{{chartData.totalEnergy[5].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[5].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[5].avg_d2.toFixed(2)}}</td>
-                    </tr>
-                    </tr>
-                    <tr ng-show="chartData.day[6] == ''?false:true">     
-                            <th sortable="placed" class="sortable">
-                                Day {{chartData.day[6]}}
-                            </th> 
-                            <td>{{chartData.totalEnergy[6].avg_d0.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[6].avg_d1.toFixed(2)}}</td>
-                            <td>{{chartData.totalEnergy[6].avg_d2.toFixed(2)}}</td>
-                    </tr>       
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr grid-item>
-                            <td ng-bind="chartData.totalEnergy[0]"></td>
-                            <td ng-bind="chartData.totalEnergy[1]"></td>
-                            <td ng-bind="chartData.totalEnergy[2]"></td>
-                            <td ng-bind="chartData.totalEnergy[3]"></td>
-                            <td ng-bind="chartData.totalEnergy[4]"></td>
-                            <td ng-bind="chartData.totalEnergy[5]"></td>
-                            <td ng-bind="chartData.totalEnergy[6]"></td>             
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div id="carouselContainer" class="col-md-3" ng-controller="MachineChartController" style="text-align: center"> 
+        <div id="messageContainer" style="position: relative;top: 30%" ng-show="messageContainerVisible  ? true:false">
+           <span style="color: #004aac;font-size: 20px"><b>The monthly data is shown by the graph on the left.</b></span>
+           </br>
+           <span style="color: #999;font-size: 18px;">Click on any month to drilldown further.</span>
+           <hr style="bottom: 10px"></hr>
         </div>
-   <!-- End carousel -->    
-   <script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script> 
     </div>    
     </div>
 </div>   
-
+ <!--<script src="https://unpkg.com/flickity@2.0/dist/flickity.pkgd.min.js"></script> -->

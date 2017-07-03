@@ -1,0 +1,15 @@
+ <div ng-controller="MachineChartController" style="text-align: center;top: 10px; position: relative;">
+     <!--<button data-dismiss="modal" class="close">×</button>-->
+     <span style="font-size: 20px;color: #666">Please select the year</span>
+     <hr></hr>
+    <div style="height: 55px;background: white;position: relative;" >
+        <div layout="row" layout-sm="column" layout-align="space-around">
+             <md-progress-circular ng-disabled="!activated" md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
+        </div>
+        <ul style="position: absolute;">
+            <li ng-repeat="year in tabs" style="list-style: none;float: left">
+                <md-button id="year-button" ng-click="yearSelected(year.title)">{{year.title}}</md-button>
+            </li>
+        </ul>
+     <div>       
+</div>

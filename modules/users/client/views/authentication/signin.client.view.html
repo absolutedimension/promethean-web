@@ -35,12 +35,12 @@
   <div class="col-md-8" style="height: 678px;width: 90%">
     <img ng-src="/modules/core/client/img/login_image.png" style="width: 100%;height: 100%"/>
   </div>
-  <div class="col-md-4" style="position: relative;width: 10%">
+  <div class="col-md-4" style="position: relative;width: 10%;height: 678px">
        <div>
           <img ng-src="/modules/core/client/img/logo.png" style="width: 200px;height: 200px;position: absolute;left: 75%"/>       
       </div>
       <div style="top: 260px;width:320px;position: absolute;text-align: center"> 
-         <span style="font-size: 18px; color: blue; position: relative;">User Login</span>
+         <span style="font-size: 18px; color:#004aac; position: relative;">User Login</span>
           <hr style="width: 100%"></hr>         
       <form name="userForm" ng-submit="signin(userForm.$valid)" class="signin" novalidate autocomplete="off" style="position: absolute;">
         <fieldset>
@@ -58,11 +58,11 @@
             </div>
           </div>
           <div class="text-center form-group">
-            <md-button type="submit" style="color: blue">Login</md-button>
+            <md-button type="submit" class="login-button">Login</md-button>
           </div>
-          <div class="text-center forgot-password">
+          <!--<div class="text-center forgot-password">
             <a ui-sref="password.forgot">Forgot your password?</a>
-          </div>
+          </div>-->
           <div class="text-center forgot-password">
             <a style="cursor: pointer" ng-click="addAdminSignup()">Admin Signup</a>
           </div>
@@ -70,9 +70,13 @@
             <span ng-bind="error"></span>
           </alert>
         </fieldset>
-    </form>
+     </form>
       </div>
-
+      <div id="privacyContainer" style="position: absolute;text-align: center;bottom: 5px;width: 333px;">
+          <span style="color: #666">Privacy Policy</span>
+          </br>
+          <span style="color: #999">Copyright 2017 Promethean Energy Pvt Ltd</span>
+      </div>
   </div>
 </div>
 </div>

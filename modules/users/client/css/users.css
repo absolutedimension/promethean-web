@@ -41,8 +41,12 @@
  overflow: auto
 }
 .admin-modal-window .modal-content {
-  height: 300px;
+  height: 350px;
   padding: 20px;
+}
+.year-modal-window .modal-content {
+  height: 300px;
+  top:150px;
 }
 .searchInput{
     width: 80%;

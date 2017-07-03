@@ -1,12 +1,15 @@
 <div style="background-color: #fbfcfd" ng-controller="ChartLiveController">
-     <div class="row"  style="top:58px;width: 100%;position: absolute;background-color:#fbfcfd;padding-top: 20px " ng-init="machineDetailInit()">
-        <div class="col-md-3" style="border-right: 1px solid #e2e2e2;width: 15%;height: 580px">
-             <table style="left: 25%;position: absolute; border-collapse: separate;border-spacing: 0 0em;top:50px">
+     <div class="row"  style="top:58px;width: 100%;position: absolute;background-color:#fbfcfd;padding-top: 20px; " ng-init="machineDetailInit()">
+        <div class="col-md-3" style="border-right: 1px solid #e2e2e2;width: 15%;height: 605px;background: #f5f5f5;top: -23px;">
+             <table style="position: absolute; border-collapse: separate;border-spacing: 1em;top:50px">
                  <tr>
                     <td>
                         <ul style="list-style-type: none;cursor: pointer">
-                            <li>
-                                 <a ui-sref="home">Home</a>
+                            <li>                
+                                 <a ui-sref="home" style="cursor: pointer">
+                                      <img id="home-live-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/home_default.png"></img>
+                                    <span style="color: #666">Home</span>        
+                                 </a>
                             </li>
                         </ul>    
                     </td>
@@ -14,8 +17,11 @@
                 <tr>
                     <td>
                         <ul>
-                            <li style="color: blue;list-style-type: disc;font-size: 15px">
-                                <a style="color: blue">Live</a>
+                            <li style="color: #004aac;list-style-type: disc;font-size: 15px">
+                                <a style="color: #004aac;cursor: pointer">
+                                     <img id="live-live-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/live_clicked.png"></img>
+                                      <span style="color: #004aac">Live</span> 
+                                </a>
                             </li>
                         </ul>
                     </td>
@@ -24,7 +30,10 @@
                     <td>
                         <ul style="list-style-type: none;cursor: pointer">
                             <li>
-                                 <a style="cursor: pointer" ng-click="goToHistoricState()">Historic</a>
+                                 <a style="cursor: pointer" ng-click="goToHistoricState()">
+                                     <img id="historic-live-img" style="width: 24px;height: 24px" ng-src="./modules/core/client/img/historical_default.png"></img>
+                                    <span style="color: #666">Historical</span> 
+                                 </a>
                             </li>
                         </ul>    
                     </td>
@@ -55,12 +64,18 @@
                 <hr style="margin: 10px"></hr>
                 <div style="margin-bottom: 30px">             
                     <div id="liveChartContainer" style="width: 650px; height: 350px; float: left;
-                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px"></div>   
-                          <div layout="row" layout-sm="column" layout-align="space-around" style="top:200px;right:150px;position: absolute">
-                             <md-progress-circular md-mode="determinate" value="{{determinateValue}}"></md-progress-circular>
+                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px">
+                        <div layout="row" layout-sm="column" layout-align="space-around" style="top:200px;left:33.33%;position: absolute">
+                             <md-progress-circular ng-disabled="!activatedLive" md-mode="determinate" value="{{determinateValueLive}}"></md-progress-circular>
                          </div>
+                     </div>   
+                          
                     <div id="container-speed" style="width: 350px; height: 350px; float: left;
-                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px"></div>
+                     box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);margin: 10px">
+                         <div layout="row" layout-sm="column" layout-align="space-around" style="top: 140px;left: 10%;position: relative">
+                             <md-progress-circular ng-disabled="!activatedLive" md-mode="determinate" value="{{determinateValueLive}}"></md-progress-circular>
+                         </div>
+                     </div>
                 </div>    
                 <table style="width: 50%;text-align: center;bottom: 30px;left: 40px;position: absolute;" >                 
                     <tr>
@@ -69,7 +84,7 @@
                             box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
                                 <span style="color: #666666">FLOW</span>
                                 </br>
-                                <span step="0.01" style="color: #999999">{{averageFlowIn.toFixed(2)}} KLP</span>
+                                <span step="0.01" style="color: #999999">{{averageFlowIn.toFixed(2)}} LPH</span>
                             </div>
                         </td>
                         <td >

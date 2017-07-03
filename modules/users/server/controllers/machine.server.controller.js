@@ -1616,7 +1616,7 @@ function getLiveData1_4(deviceId,res) {
         dId:"$dId"},
          d0 :{ "$first": "$d0"},
          d1 :{ "$first": "$d1"},
-         d2 :{ "$first": "$d2"}
+         d2 :{ "$first": "$d2 "}
        
        }
      }

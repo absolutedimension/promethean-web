@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window','$modal', 'Authentication', 'PasswordValidator',
-  function ($scope, $state, $http, $location, $window,$modal, Authentication, PasswordValidator) {
+angular.module('users').controller('AuthenticationController', ['$scope', '$state', '$http', '$location', '$window','$modal','$modalStack', 'Authentication', 'PasswordValidator',
+  function ($scope, $state, $http, $location, $window,$modal,$modalStack, Authentication, PasswordValidator) {
     $scope.authentication = Authentication;
     $scope.popoverMsg = PasswordValidator.getPopoverMsg();
 
@@ -78,7 +78,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$stat
      $scope.doAdminSignup = function(adminUser){
      // alert("User brforwe "+JSON.stringify(adminUser));
       $http.post('api/auth/adminsignup',adminUser).then(function(response){    
-           $scope.adminModal.close();
+           $modalStack.dismissAll();
       }).catch(function(response){
            $scope.error = response.data.message;
       });

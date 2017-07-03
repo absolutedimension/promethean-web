@@ -1,11 +1,11 @@
-<div ng-controller="HomeController" class="col-md-12" style="background-color: #fbfcfd;height: 620px;top: 4px;position: relative">
-  <h3><span style="color: #666">Hi {{loggedInUser.firstName}} ,here is your list of machines.</span></h3>
-  <div style="position: relative;width: 100%;height: 90px" >
+<div ng-controller="HomeController" class="col-md-12" style="background-color: #fafafa;height: 620px;top: 4px;position: relative;padding: 0px">
+  <div style="position: relative;width: 100%;height: 110px;background: #f5f5f5;border-bottom: 1px solid #e2e2e2" >
+      <span style="color: #999; left: 15px;position: relative;font-size: 20px;top:10px">Hi {{loggedInUser.firstName}}, here are your list of active machines.</span>
       <input id="deviceSearch" type="text" autocomplete="true" ng-model="searchText" placeholder="Search"/>   
   </div>
     <!--<div  style="position: relative;width: 100%" >-->
-      <div class='md-padding' layout="row" layout-wrap style="margin-top: 30px;height: 100%;margin-left: 20%">
-        <div   ng-repeat="machine in authentication.user.machineAllocated | filter:searchText" style="left:10%;width: 50%" ng-init="getTablesName()">
+      <div id="home-card-container" class='md-padding' layout="row" layout-wrap >
+        <div id="home-card-repeater"  ng-repeat="machine in authentication.user.machineAllocated | filter:searchText"  ng-init="getTablesName()">
           <div class="padded" md-whiteframe="{{height}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center" ng-click="goToCharts(machine)" 
                   ng-init="height = 3" ng-mouseenter="height = 6" ng-mouseleave="height = 3" style="width: 300px;height: 110px;margin: 10px">             
                 <table style="width: 100%;height: 100%;background: white">
@@ -14,21 +14,23 @@
                        <img id="machineImage" style="width: 70px; height: 70px; margin: 10px;"/>
                     </td>-->
                     <td style="width: 90%;padding-left: 15px">
-                      <span style="color: #666;font-size: 18px">{{machine.machineName}}</span>
+                      <span style="color: #666;font-size: 16px">{{machine.machineName}}</span>
                       </br>
-                       <img id="machineImage" ng-src="./modules/core/client/img/location.png"/>
-                       <span style="color: #999;font-size: 14px">{{machine.location}}</span>
+                       <img id="machineImage" style="width: 16px;height: 16px" ng-src="./modules/core/client/img/location.png"/>
+                       <span style="color: #999;font-size: 14px;">{{machine.location}}</span>
                       </br>
-                      <span style="color: #666;font-size: 16px">Device Id : {{machine.machineId}}</span>
+                      <span style="color: #999;font-size: 16px;top:10px;position: relative;">Device ID : </span>
+                      <span style="color: #666;font-size: 16px;top:10px;position: relative;">{{machine.machineId}}</span>
                       </br>
-                      <span style="color: #666;font-size: 16px">Unit Id : {{machine.unitId}}</span>
+                      <span style="color: #999;font-size: 16px;top:5px;position: relative">Unit ID : </span>
+                       <span style="color: #666;font-size: 16px;top:5px;position: relative;">{{machine.unitId}}</span>
                       
                     </td>
-                    <!--<td style="height: 100%">
+                    <td style="height: 100%">
                       <div style="height: 100%;background: orange">
-                        <img ng-src="/modules/core/client/img/right.png" style="width: 24px;height: 24px;position: absolute;top: 42%;margin-left: 5px;"/>
+                        <img  id="next-arrow"  ng-src="/modules/core/client/img/right.png" style="width: 24px;height: 24px;position: relative;top: 42%;margin-left: 5px;"/>
                       </div>
-                    </td>-->
+                    </td>
                   </tr>
               </table>
           </div>

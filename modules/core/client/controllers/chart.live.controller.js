@@ -1,8 +1,8 @@
 
 'use strict';
 
-angular.module('core').controller('ChartLiveController', ['$scope','$http', '$state','$stateParams','$timeout','$interval', 'Authentication', 'Menus',
-  function ($scope,$http, $state,$stateParams,$timeout,$interval, Authentication, Menus) {
+angular.module('core').controller('ChartLiveController', ['$scope','$http', '$state','$stateParams','$modal','$timeout','$interval', 'Authentication', 'Menus',
+  function ($scope,$http, $state,$stateParams,$modal,$timeout,$interval, Authentication, Menus) {
     // Expose view variables
     $scope.$state = $state;
     $scope.authentication = Authentication;
@@ -27,6 +27,18 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     var deviceId = deviceIdTemp+"_"+unitId;
 
     $scope.machineObject = $state.params;
+     loadLoader();
+        
+    function loadLoader(){
+        $scope.activatedLive = true;
+        $scope.determinateValueLive = 30;
+        $interval(function() {
+            $scope.determinateValueLive += 1;
+            if ($scope.determinateValueLive > 70) {
+             $scope.determinateValueLive = 0;
+            }
+        }, 100);   
+    }
 
     //alert("Device :"+JSON.stringify($stateParams));
 
@@ -40,7 +52,16 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     }
 
     $scope.goToHistoricState = function(){
-        $state.go('historic-chart',$stateParams);
+       //$state.go('historic-chart',$stateParams);
+        openYearChoice();
+    }
+    function openYearChoice(){
+          $scope.machineYearModal = $modal.open({
+          animation: true,
+          templateUrl: './modules/core/client/views/machine.years.view.html',
+          controller: 'MachineChartController',
+          windowClass:'year-modal-window'
+        });
     }
 
     function getLiveData(){
@@ -52,6 +73,7 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                 $scope.dataD1.push(responseData[i].d1);
                 $scope.dataD2.push(responseData[i].d2);
             }
+            $scope.activatedLive = false;
             populateChartLive();
         }).catch(function(response){
 
@@ -68,7 +90,7 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     function getAverageWaterOut(){
         $http.get('api/machinesData/getAveragePowerLive/'+deviceId).then(function(response){
             // alert("WAter out :"+response.data[0]);
-        $scope.averagePower = response.data[0].avg_water_out;
+        $scope.averagePower = response.data[0].avg_water_power;
     }).catch(function(response){
 
     });
@@ -102,7 +124,7 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
         //$scope.liveGaugeValue  =  parseFloat(gaugeValue).toFixed(2);
         //alert("Gauge Value :"+$scope.liveGaugeValue);
         //alert("Gauge Value :"+$scope.liveGaugeValue);
-        $scope.liveGaugeValue.push(gaugeValue);
+        $scope.liveGaugeValue.push(parseInt(gaugeValue));
         populateGaugeChart();
         
         //$timeout(populateGaugeChart,2500);
@@ -126,14 +148,28 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                 },
                 legend: {
                     layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
+                    align: 'center',
+                    verticalAlign: 'bottom',
                 },
 
                 plotOptions: {
                     series: {
-                        pointStart: 0
+                        pointStart: 0,
+                        dataLabels:{
+                            enabled: false,
+                            crop:false,
+                            overflow:'none',
+                            align: 'left',
+                            y:10,
+                            useHTML: true,
+                            formatter: function() {
+                                return '<span style="color:'
+                                +this.series.color+'">'
+                                +this.series.name+'</span>';
+                            }
+                        }
                     }
+                    
                 },
                  xAxis:{
                     type:"category",
@@ -141,7 +177,9 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                         text: 'Last One Hour'
                     }
                 },
-
+                credits: {
+                 enabled: false
+                },
                 series: [{
                     name: 'Average Water In',
                     data: $scope.dataD0
@@ -160,19 +198,6 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
 
       function populateLiveData(){
           getLiveData();
-           $scope.activated = true;
-            $scope.determinateValue = 30;
-
-            // Iterate every 100ms, non-stop and increment
-            // the Determinate loader.
-            $interval(function() {
-
-                $scope.determinateValue += 1;
-                if ($scope.determinateValue > 100) {
-                $scope.determinateValue = 30;
-                }
-
-            }, 100);    
       }
 
       function populateGaugeChart(){
@@ -198,6 +223,9 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
             },
 
             tooltip: {
+                enabled: false
+            },
+            credits: {
                 enabled: false
             },
 
@@ -234,12 +262,14 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
         var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
             yAxis: {
                 min: 0,
-                max: 300,
+                max: 110,
                
             },
-
             credits: {
                 enabled: false
+            },
+            title:{
+                text:'Average Temp'
             },
 
             series: [{
