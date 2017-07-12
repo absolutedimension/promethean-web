@@ -14,11 +14,11 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
     $scope.askForPasswordReset = function (isValid) {
       $scope.success = $scope.error = null;
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'forgotPasswordForm');
+      // if (!isValid) {
+      //   $scope.$broadcast('show-errors-check-validity', 'forgotPasswordForm');
 
-        return false;
-      }
+      //   return false;
+      // }
 
       $http.post('/api/auth/forgot', $scope.credentials).success(function (response) {
         // Show user success message and clear form

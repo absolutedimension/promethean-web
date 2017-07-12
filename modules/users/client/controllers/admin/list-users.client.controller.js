@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users.admin').controller('UserListController', ['$scope','$http','$state', '$filter','$modal','$mdToast', 'Admin',
-  function ($scope,$http,$state, $filter,$modal,$mdToast, Admin,User,MachineDetail) {
+angular.module('users.admin').controller('UserListController', ['$scope','$rootScope','$http','$state','$timeout', '$filter','$modal','$mdToast', 'Admin',
+  function ($scope,$rootScope,$http,$state,$timeout, $filter,$modal,$mdToast, Admin,User,MachineDetail) {
     Admin.query(function (data) {
       $scope.users = data;
       $scope.buildPager();
@@ -58,6 +58,13 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
       provider:'local',
       username:null,
       machineAllocated:[],
+    }
+
+    $scope.labelToShow = function(chip){
+       return {
+        name: chip.companyName,
+        type: 'unknown'
+      };
     }
 
     $scope.uploadMachineImage = function(){
@@ -174,7 +181,23 @@ angular.module('users.admin').controller('UserListController', ['$scope','$http'
         });
     }
 
-     $scope.editMachines = function(userToEdit){
+     $scope.editUser = function(userToEdit){
+       //alert("User Data :"+ userToEdit.firstName);
+        $rootScope.userToEdit =  userToEdit;
+         $modal.open({
+          animation: true,
+          templateUrl: './modules/users/client/views/admin/edit-user.client.view.html',
+          controller: 'UserListController',
+          windowClass:'user-modal-window'
+        });
+         //$timeout(populateUserDetail,5000);
+        
+    }
+    function populateUserDetail(){
+      alert("User ssssssss :"+ $scope.userToEditBefore.firstName);
+      $scope.userToEdit =   $scope.userToEditBefore;
+    }
+    $scope.editMachines = function(userToEdit){
        //alert("User Data :"+JSON.stringify(userToEdit));
       
          $modal.open({

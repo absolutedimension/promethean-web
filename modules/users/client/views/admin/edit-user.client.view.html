@@ -2,10 +2,10 @@
      <div class="row" style="margin: 20px" >
          <!--<span style="font-size: 20px;color: #333333">EDIT </span>
          <hr style="margin-top: 5px;margin-bottom: 7px"></hr> -->
-        <form name="userForm" class="form-inline"  ng-submit="addUser(userForm.$valid)" novalidate>
+        <form name="userForm" class="form-inline"  ng-controller="UserListController" ng-submit="addUser(userForm.$valid)" novalidate>
             <fieldset>
                   <div style="position: relative;height: 40px;margin-top: 20px">
-                      <span style="font-size: 18px;color: #666666">EDIT USER DETAILS</span>
+                      <span style="font-size: 18px;color: #666666">USER DETAILS</span>
                   </div>
                   <div style="position: relative;height: 40px;margin-top: 20px">
                     <span style="position: absolute;top:10px">User Name </span>
@@ -15,17 +15,24 @@
                     <span style="position: absolute;top:10px">Email </span>
                     <input type="text" ng-model="userToEdit.email" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
                  </div>
-                 <div style="position: relative;height: 40px;">
+                 <!--<div style="position: relative;height: 40px;">
                     <span style="position: absolute;top:10px">Password </span>
                     <input type="password" ng-model="userToEdit.password" class="grp1-textarea pro-input" style="margin-top:7px;margin-bottom: 7px;float: right;width: 70%"></input>
-                 </div>
-                 <div style="position: relative;height: 40px;">
+                 </div>-->
+                 <!--<div style="position: relative;height: 40px;">
                     <button  ng-click="addUserToMachine(userToEdit)" style="float: right;border-radius: 20px;background-color: #08c65b;color: white;width: 75px;height: 25px;border: 0px"> Add User</button>
-                 </div>
-                    <md-chips md-on-remove="chipsChanged($chip)" ng-model="userToEdit.machineAllocated" readonly="readonly" md-removable="removable" md-chip-remove></md-chips>
+                 </div>-->
+                    <md-chips class="custom-chips" md-transform-chip="labelToShow($chip)" md-on-remove="chipsChanged($chip)" ng-model="userToEdit.machineAllocated" readonly="readonly" md-removable="removable" md-chip-remove>
+                         <md-chip-template>
+                            <span>
+                            <strong>[{{$chip.machineId}}] {{$chip.machineName}}</strong>
+                            <em>({{$chip.unitId}})</em>
+                            </span>
+                        </md-chip-template>
+                    </md-chips>
                       
                 <div class="form-group form-inline" style="height: 50px;width: 100%">
-                    <input type="submit" value="Add Machine" 
+                    <input type="submit" value="Save" 
                     ng-click="addUserInfo()"
                     class="btn btn-default add-machine-button">
                 </div>

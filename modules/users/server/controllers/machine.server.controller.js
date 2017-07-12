@@ -11,12 +11,12 @@ var  mongoose = require('mongoose'),
 
 
 exports.getTableData = function(req, res, next ,id) {
-  Machine.find({"dId":id}).limit(1400).exec(function (err, machines) {
+  Machine.find({"dId":id}).limit(1400).sort('-cd').exec(function (err, machines) {
     if (err) {
         console.log("Error  :"+err);
       return next(err);
     } else if (!machines) { 
-      return next(new Error('Failed to load Machine ' +98));
+      return next(new Error('Failed to load Machine '));
     } 
     res.jsonp(machines);
   });
@@ -98,7 +98,7 @@ function getDataByYear1_4(res,deviceId){
             console.log("Error  :"+err);
           return next(err);
         } else if (!machines) {
-        return next(new Error('Failed to load Machine ' +98));
+        return next(new Error('Failed to load Machine ' ));
       }
       res.jsonp(machines);
    });
@@ -237,10 +237,9 @@ function getDataByMonth2_4(res,deviceId,year_input){
         month_agg : {$month : "$ts"},
         year_agg  : {$year : "$ts"},
         hour_agg  : {$hour : "$ts"},
-        d0 :1,
-        d1:1,
+        d3 :1,
         d2:1,
-        f0:1,
+        f1:1,
         dId:1
       }
     },
@@ -409,10 +408,10 @@ function getDataByDay2_4(res,deviceId,year_input,month_input){
         month_agg : {$month : "$ts"},
         year_agg  : {$year : "$ts"},
         hour_agg  : {$hour : "$ts"},
-        d0 :1,
-        d1:1,
+        d2 :1,
+        d3:1,
         d2:1,
-        f0:1,
+        f1:1,
         dId:1
       }
     },
@@ -423,8 +422,8 @@ function getDataByDay2_4(res,deviceId,year_input,month_input){
       $group :{
         _id : "$dayOfMonth_agg",
         totalEnergy : { $sum: { $multiply: [{$subtract:["$d3","$d2"]},"$f1"] } },
-        avg_d2:{$avg:"$d0"},
-        avg_d3:{$avg:"$d1"},
+        avg_d0:{$avg:"$d2"},
+        avg_d1:{$avg:"$d3"},
         avg_d2:{$avg:"$d2"},
       }
      },
@@ -565,7 +564,9 @@ function getDataByHour1_4(res,deviceId,year_input,month_input,day_input){
         d0 :1,
         d1:1,
         d2:1,
-        dId:1
+        dId:1,
+        a2:1,
+        f0:1
       }
     },
     {
@@ -575,9 +576,9 @@ function getDataByHour1_4(res,deviceId,year_input,month_input,day_input){
       $group: {
           _id: "$hour_agg",
             totalEnergy : { $sum: { $multiply: [{$subtract:["$d1","$d0"]},"$f0"] } },
-            avg_d0:{$avg:"$d0"},
-            avg_d1:{$avg:"$d1"},
-            avg_d2:{$avg:"$d2"}        
+            avg_waterin:{$avg:"$d0"},
+            avg_waterout:{$avg:"$d1"},
+            avg_oiltemp:{$avg:"$a2"}        
       }
     },
      {
@@ -601,10 +602,11 @@ function getDataByHour2_4(res,deviceId,year_input,month_input,day_input){
         month_agg : {$month : "$ts"},
         year_agg  : {$year : "$ts"},
         hour_agg  : {$hour : "$ts"},
-        d0 :1,
-        d1:1,
+        d3 :1,
+        f1:1,
         d2:1,
-        dId:1
+        dId:1,
+        a5:1
       }
     },
     {
@@ -614,9 +616,9 @@ function getDataByHour2_4(res,deviceId,year_input,month_input,day_input){
       $group: {
           _id: "$hour_agg",
            totalEnergy : { $sum: { $multiply: [{$subtract:["$d3","$d2"]},"$f1"] } },
-            avg_d2:{$avg:"$d2"},
-            avg_d3:{$avg:"$d3"},
-            avg_d2:{$avg:"$d2"}        
+            avg_waterin:{$avg:"$d2"},
+            avg_waterout:{$avg:"$d3"},
+            avg_oiltemp:{$avg:"$a5"}        
       }
     },
      {
@@ -644,7 +646,8 @@ function getDataByHour_98(res,deviceId,year_input,month_input,day_input){
         d0 :1,
         d1:1,
         d2:1,
-        dId:1
+        dId:1,
+        f0:1
       }
     },
     {
@@ -654,9 +657,9 @@ function getDataByHour_98(res,deviceId,year_input,month_input,day_input){
       $group: {
           _id: "$hour_agg",
             totalEnergy : { $sum: { $multiply: [{$subtract:["$d1","$d0"]},"$f0"] } },
-            avg_d0:{$avg:"$d0"},
-            avg_d1:{$avg:"$d1"},
-            avg_d2:{$avg:"$d2"}        
+            avg_waterin:{$avg:"$d0"},
+            avg_waterout:{$avg:"$d1"},
+            avg_oiltemp:{$avg:"$d2"}        
       }
     },
      {
@@ -684,7 +687,8 @@ function getDataByHour_14(res,deviceId,year_input,month_input,day_input) {
         d0 :1,
         d1:1,
         d2:1,
-        dId:1
+        dId:1,
+        f0:1
       }
     },
     {
@@ -694,9 +698,9 @@ function getDataByHour_14(res,deviceId,year_input,month_input,day_input) {
       $group: {
           _id: "$hour_agg",
             totalEnergy : { $sum: { $multiply: [{$subtract:["$d1","$d0"]},"$f0"] } },
-            avg_d0:{$avg:"$d0"},
-            avg_d1:{$avg:"$d1"},
-            avg_d2:{$avg:"$d2"}        
+            avg_waterin:{$avg:"$d0"},
+            avg_waterout:{$avg:"$d1"},
+            avg_oiltemp:{$avg:"$d2"}        
       }
     },
      {
@@ -1616,7 +1620,7 @@ function getLiveData1_4(deviceId,res) {
         dId:"$dId"},
          d0 :{ "$first": "$d0"},
          d1 :{ "$first": "$d1"},
-         d2 :{ "$first": "$d2 "}
+         a2 :{ "$first": "$a2 "}
        
        }
      }
@@ -1642,9 +1646,9 @@ function getLiveData2_4(deviceId,res) {
         Year : {$year : "$ts" },
         Minute : {$minute : "$ts" },
         dId:"$dId"},
-         d0 :{ "$first": "$d0"},
-         d1 :{ "$first": "$d1"},
-         d2 :{ "$first": "$d2"}
+         waterin :{ "$first": "$d2"},
+         waterout :{ "$first": "$d3"},
+         oiltemp :{ "$first": "$a5"}
        
        }
      }
@@ -1672,7 +1676,7 @@ function getLiveData_14(deviceId,res) {
         dId:"$dId"},
          d0 :{ "$first": "$d0"},
          d1 :{ "$first": "$d1"},
-         d2 :{ "$first": "$d2"}
+         a2 :{ "$first": "$a2"}
        
        }
      }
@@ -1883,119 +1887,248 @@ function  getAvgFlowByHour_98(deviceId,year_input,month_input,day_input,res) {
       res.jsonp(machines);
    });
 }
+var async = require('async');
+
+// async.series([
+//    prepareLineDataChart,
+//    prepareFlowChartData
+// ]);
+
+function callback(){
+  console.log("Charts Data Executed");
+}
 
 
-exports.sendReport = function(req,res,next){
+var dataD0_hour = [];
+var dataD1_hour = [];
+var dataD2_hour = [];
+var startPoint = null;
+function prepareLineDataChart() {
+    var http = require('http');
+    var getCurrentTime = new Date();
+    var year_current = getCurrentTime.getFullYear();
+    var month_current = getCurrentTime.getMonth()+1;
+    var day_current = getCurrentTime.getDate();
+    console.log("Time for report gen.....................:"+getCurrentTime,year_current,month_current,day_current);
+    var options = {
+    
+      port:3000,
+      path: '/api/machinesData/getDataByHour/14/'+year_current+"/"+month_current+"/"+day_current
+    };
+
+      function callback(response) {
+      var str = '';
+
+      //another chunk of data has been recieved, so append it to `str`
+      response.on('data', function (chunk) {
+        str += chunk;
+        //cosole.log("Chart outpput data "+str);
+      });
+
+      //the whole response has been recieved, so we just print it out here
+      response.on('end', function () {
+        console.log("Chart outpput data "+JSON.parse(str));
+        var chartDataOutput = JSON.parse(str);
+        for(var i=0;i<chartDataOutput.length;i++){
+          dataD0_hour.push(chartDataOutput[i].avg_d0);
+          dataD1_hour.push(chartDataOutput[i].avg_d1);
+          dataD2_hour.push(chartDataOutput[i].avg_d2);
+        }
+        startPoint = chartDataOutput[0]._id;
+        exportLineChart();
+      });
+      response.on('error', function(err) {
+       console.log("Chart outpput error "+err);
+      });
+    }
+
+    http.request(options, callback).end();
+}
+
+var currentTimeStamp = new Date();
+  function exportLineChart(){
     //Export settings
-    var chartInput  = req.body;
-    var monthSeries = chartInput.monthSeries;
-    var seriesData = chartInput.seriesData;
-    var finalDrilldownData = chartInput.finalDrilldownData; 
-    console.log("Inside reports");
     var exportSettings = {
-        type: 'pdf',
-        outfile:"Promethean_Chart",
-        tmpdir:'./modules/core/client/img/charts_pdf',
-        options: {
-            chart: {
-                 type: 'column',
-            //      events:{
-            //      drilldown: function(e) {
-            //          if( $scope.drilldownCompleted ) {
-            //              pupulateLineChart(e.point.name);
-            //          }          
-            //          $scope.drilldownCompleted = true;
-            //       // alert("Inside Drill Down :"+e.point.name);
-            //          $scope.lastClickedMonth = e.point.name;
-            //     },
-            //     drillupall:function(e){
-            //         $scope.drilldownCompleted = false;
-            //     }
-            // }
+        type: 'svg',
+        outfile:'DailyTempAnalysis_'+currentTimeStamp,
+        tmpdir:'charts_exported',
+        options : {
+            enableServer:1,
+            host:"localhost",
+            port:3000,
+            exporting:{
+                url:'http://localhost:3000'
             },
-            title: {
-                text: 'Promethean Daily Report'
-            },
-            // subtitle: {
-            //     text: 'Promethean'
-            // },
-            xAxis: {
-                categories:$scope.monthSeries
-            },
+           
             yAxis: {
                 title: {
-                    text: '<b>TOTAL ENERGY</b>'
+                    text: 'Average Temp'
                 }
-
             },
-            legend: {
+            title: {
+                text: ''
+            },
+              legend: {
+                layout: 'vertical',
+                align: 'center',
+                verticalAlign: 'top',
+            },
+            xAxis:{
+                type:"category",
+                title: {
+                    text: 'Hours of the Day'
+                }
+            },
+            credits: {
                 enabled: false
             },
             plotOptions: {
                 series: {
-                    borderWidth: 0,
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.y:.1f}'
-                    }
+                    pointStart: startPoint
                 }
             },
 
-            tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br/>'
-            },
-
-            series:[{
-                name: 'Months',
-                colorByPoint: true,
-                data:seriesData
-            }],
-            drilldown: {
-                series:finalDrilldownData,
-                activeAxisLabelStyle :{
-                    textDecoration:'none'
-                }
- 
-              
-            }
+            series: [{
+                name: 'Average Water In',
+                data: dataD0_hour
+            }, {
+                name: 'Average Water Out',
+                data: dataD1_hour
+            }, {
+                name: 'Average Oil Temp',
+                data: dataD2_hour
+            }]
         }
-    };
-
-    // //Set up a pool of PhantomJS workers
-     exporter.initPool();
-
-    // //Perform an export
-    // /*
-    //     Export settings corresponds to the available CLI arguments described
-    //     above.
-    // */
+      }
+    exporter.initPool();
     exporter.export(exportSettings, function (err, resp) {
-        //The export result is now in res.
         //If the output is not PDF or SVG, it will be base64 encoded (res.data).
         //If the output is a PDF or SVG, it will contain a filename (res.filename).
          if (err) {
             console.log("Error  :"+err);
-          return next(err);
+          return err;
         }
         console.log("File name..."+resp.filename);     
-        res.jsonp(resp.data);
-
+        // resp.jsonp(resp.data);
         //Kill the pool when we're done with it, and exit the application
-       // exporter.killPool();
-       // process.exit(1);
+        exporter.killPool();
+        //process.exit(1);
     });
+  };
+
+function exportFlowChart(){
+    var exportSettingsFlow = {
+    type:"svg",
+    outfile:'HourlyFlow_'+currentTimeStamp,
+    tmpdir:"charts_exported",
+    options:{
+        title: {
+            text: 'Flow'
+        },
+        type:'column',
+        filename :"Flow_Hourly",
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            categories:averageFlowTimes,
+            
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Average Flow (LPH)'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} lph </b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Hour of the Day',
+            data: averageFlowEnergyArray
+
+        }
+        ]
+    }
+  }
+   exporter.initPool();
+   exporter.export(exportSettingsFlow, function (err, resp) {
+         if (err) {
+            console.log("Error  :"+err);
+          return err;
+        }
+        console.log("File name..."+resp.filename);     
+    });
+    //exporter.killPool();
 }
+var startPointFlow = 0;
+var averageFlowEnergyArray = [];
+var averageFlowTimes = [];
+
+function prepareFlowChartData() {
+    var http = require('http');
+    var getCurrentTime = new Date();
+    var year_current = getCurrentTime.getFullYear();
+    var month_current = getCurrentTime.getMonth()+1;
+    var day_current = getCurrentTime.getDate();
+    console.log("Time for report gen.....................:"+getCurrentTime,year_current,month_current,day_current);
+    var options = {
+    
+      port:3000,
+      path: '/api/machinesData/getAvgFlowByHour/14/'+year_current+"/"+month_current+"/"+day_current
+    };
+
+      function callback(response) {
+      var str = '';
+
+      //another chunk of data has been recieved, so append it to `str`
+      response.on('data', function (chunk) {
+        str += chunk;
+        //cosole.log("Chart outpput data "+str);
+      });
+
+      //the whole response has been recieved, so we just print it out here
+      response.on('end', function () {
+        console.log("Chart outpput data "+JSON.parse(str));
+        var averageFlowEnergy = JSON.parse(str);
+        for(var i=0;i<averageFlowEnergy.length;i++){
+          averageFlowEnergyArray.push(averageFlowEnergy[i].averageFlowEnergy);
+          averageFlowTimes.push(averageFlowEnergy[i]._id);
+        }
+        startPointFlow = averageFlowEnergy[0]._id;
+        exportFlowChart();
+      });
+      response.on('error', function(err) {
+       console.log("Chart outpput error "+err);
+      });
+    }
+
+    http.request(options, callback).end();
+  
+}
+
 scheduleReportGeneration();
 function scheduleReportGeneration(){
-  var rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = [0, new schedule.Range(1, 6)];
-  rule.hour = 10;
-  rule.minute = 10;
-  
-  var j = schedule.scheduleJob(rule, function(){
-    sendEmailToClient();
-  });
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [0, new schedule.Range(1, 6)];
+    rule.hour = 16;
+    rule.minute = 7;
+    
+    var j = schedule.scheduleJob(rule, function(){
+      sendEmailToClient();
+    });
 }
 
 //sendEmailToClient();
@@ -2005,7 +2138,7 @@ function sendEmailToClient(){
     let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
-        secure: true, // secure:true for port 465, secure:false for port 587
+        secure: false, // secure:true for port 465, secure:false for port 587
         auth: {
             user: 'prakashkumarin@gmail.com',
             pass: 'Conciousness!@#123'
@@ -2014,14 +2147,14 @@ function sendEmailToClient(){
 
     // setup email data with unicode symbols
     let mailOptions = {
-        from:'prakashkumarin@gmail.com', // sender address
+        from:'ashwinkp@prometheanenergy.in', // sender address
         to: 'prakashkumarin@gmail.com', // list of receivers
         subject: 'Daily Report', // Subject line
         text: 'This is autogenerated daily report from Promethean Energy', // plain text body
         html: '<b>This is autogenerated daily report from Promethean Energy</b>', // html body
         attachment:[{   // file on disk as an attachment
-        filename: 'logger.py',
-        path: '/home/prakash/Documents/logger.py' // stream this file
+        filename: 'logo.png',
+        path: './modules/core/client/img/logo.png' // stream this file
     }]
     };
 
@@ -2034,4 +2167,20 @@ function sendEmailToClient(){
     });
 }
 
-
+exports.getToFromDataTable = function(req,res,next){
+  var deviceId = req.param('dId');
+  var toDateInput = req.param('toDate');
+  var fromDateInput = req.param('fromDate');
+  var toDate = new Date(toDateInput);
+  var fromDate = new Date(fromDateInput);
+  console.log("From and to Date :"+fromDate,toDate);
+  Machine.find({dId:deviceId,cd:{$gte:fromDate,$lte:toDate}}).limit(1500).exec(function(err,machines){
+        if (err) {
+          console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      }
+      res.jsonp(machines);
+  });
+}

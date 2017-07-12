@@ -18,8 +18,8 @@ angular.module('core').directive('addtabledata',[function(){
             
         }
       }
-}]).directive('addmessage',[function(){
-        return {
+}]).directive('addmessage',[function(){ 
+        return {  
         restrict: "E",
         scope:false,
         template:"<div  style='position: relative;top: 30%'>"+

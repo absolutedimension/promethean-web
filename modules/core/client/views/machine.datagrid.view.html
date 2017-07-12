@@ -1,72 +1,17 @@
-<div class="container" ng-controller="TableDataController" ng-init="getTableData()" style="top: 70px;position: absolute;width: 100%;margin: 10px;">
+<div class="container table-container" ng-controller="TableDataController" ng-init="getTableData()">
     <div class="row">
         <div>
-            <div class="col-md-4">
-
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="dateFromFilter">Date From</label>
-
-                    <div class="input-group">
-                        <input type="text"
-                               id="dateFromFilter"
-                               class="form-control"
-                               uib-datepicker-popup="dd/MM/yyyy"
-                               placeholder="DD/MM/YYYY"
-                               min-date="dateFrom"
-                               max-date="dateTo"
-                               close-text="Close"
-                               ng-model="dateFrom"
-                               show-weeks="true"
-                               is-open="dateFromOpened"
-                               ng-click="dateFromOpened = true"
-                               filter-by="placed"
-                               filter-type="dateFrom"
-                               ng-blur="gridActions.filter()"
-                               ng-focus="gridActions.filter()"
-                               show-weeks="false"
-                               close-text="Close"/>
-           <span class="input-group-btn">
-                            <label for="dateFromFilter" class="btn btn-default">
-                                <i class="fa fa-calendar"></i></label>
-                          </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="dateToInput">Date To</label>
-
-                    <div class="input-group">
-                        <input type="text"
-                               id="dateToInput"
-                               class="form-control"
-                               uib-datepicker-popup="dd/MM/yyyy"
-                               placeholder="DD/MM/YYYY"
-                               min-date="dateFrom"
-                               max-date="dateTo"
-                               close-text="Close"
-                               ng-model="dateTo"
-                               show-weeks="true"
-                               is-open="dateToOpened"
-                               ng-click="dateToOpened = true"
-                               filter-by="placed"
-                               filter-type="dateTo"
-                               ng-blur="gridActions.filter()"
-                               ng-focus="gridActions.filter()"
-                               show-weeks="false"
-                               close-text="Close">
-                 <span class="input-group-btn">
-                            <label for="dateToInput" class="btn btn-default">
-                                <i class="fa fa-calendar"></i></label>
-                          </span>
-                    </div>
-                </div>
-                <div ng-show="dateTo || dateFrom" class="buttons-right">
-                    <a href="" ng-click="dateTo = ''; dateFrom = ''; reloadGrid();">Clear Dates</a>
-                </div>
-            </div>
+            <div >
+                <div layout="row" style="left: 30%;position: relative;height: 50px;" flex-gt-md="30" class="range layout-column flex-gt-md-30">
+                    <input mdc-datetime-picker="" date="true" time="true" type="text" 
+                    placeholder="From Date" max-date="dateTimeEnd" ng-model="fromDate" class="search-input-date md-input"
+                    readonly="false" id="input_0">
+                    <input mdc-datetime-picker="" date="true" time="true" type="text" ng-model="toDate"
+                    placeholder="To Date" min-date="dateTimeStart"="dateTimeEnd" class="search-input-date md-input" readonly="false"
+                    id="input_1">
+                    <md-button class="search-table-button" ng-click="searchTableRange()">Search</md-button>
+               </div>
+            </div>       
         </div>
     </div>
     <hr>
@@ -90,11 +35,11 @@
                             </div>
                             <div class="form-group items-per-page">
                                 <label for="itemsOnPageSelect1">Items per page:</label>
-                                <select id="itemsOnPageSelect1" class="form-control input-sm" ng-init="paginationOptions.itemsPerPage = '10'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
-                                    <option>10</option>
-                                    <option>25</option>
-                                    <option>50</option>
-                                    <option>75</option>
+                                <select id="itemsOnPageSelect1" class="form-control input-sm" ng-init="paginationOptions.itemsPerPage = '100'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
+                                    <option>100</option>
+                                    <option>250</option>
+                                    <option>500</option>
+                                    <option>750</option>
                                 </select>
                             </div>
                         </form>
@@ -142,15 +87,18 @@
                         <th sortable="placed" class="sortable">
                             a3
                         </th>
+                         <th sortable="placed" class="sortable">
+                            a4
+                        </th>
+                         <th sortable="placed" class="sortable">
+                            a5
+                        </th>
                          
                         
                     </tr>
                     </thead>
                     <tbody>
                     <tr grid-item>
-                        <!--<td width="30%" ng-bind="item.code"></td>
-                        <td width="30%" ng-bind="item.placed | date:'MM/dd/yyyy'"></td>
-                        <td ng-bind="item.statusDisplay"></td>-->
                         <td ng-bind="item.dId"></td>
                         <td ng-bind="item.ts"></td>
                         <td ng-bind="item.cd"></td>
@@ -164,7 +112,8 @@
                         <td ng-bind="item.a1"></td>
                         <td ng-bind="item.a2"></td>
                         <td ng-bind="item.a3"></td>
-                        
+                        <td ng-bind="item.a4"></td>
+                        <td ng-bind="item.a5"></td>                   
                     </tr>
                     </tbody>
                 </table>
@@ -180,11 +129,11 @@
                     </div>
                     <div class="form-group items-per-page">
                         <label for="itemsOnPageSelect2">Items per page:</label>
-                        <select id="itemsOnPageSelect2" class="form-control input-sm" ng-init="paginationOptions.itemsPerPage = '10'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
-                            <option>10</option>
-                            <option>25</option>
-                            <option>50</option>
-                            <option>75</option>
+                        <select id="itemsOnPageSelect2" class="form-control input-sm" ng-init="paginationOptions.itemsPerPage = '100'" ng-model="paginationOptions.itemsPerPage" ng-change="reloadGrid()">
+                            <option>100</option>
+                            <option>250</option>
+                            <option>500</option>
+                            <option>750</option>
                         </select>
                     </div>
                 </form>

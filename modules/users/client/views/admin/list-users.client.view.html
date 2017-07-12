@@ -1,6 +1,6 @@
 <div style="width: 100%; height: 610px; background: #fbfcfd;top: 4px; position: relative;">
     <div class="row" style="position: absolute;top: 0px;background: #fbfcfd;height: 610px;width: 100%;padding-top: 30px;">
-      <div class="col-md-2">
+      <div class="col-md-2" style="height: 678px;background: #f5f5f5;top: -30px;border-right: 1px solid #e2e2e2">
         
           <table style="width: 100%;border-collapse: separate;border-spacing: 0 1em;margin: 10px">
               <tr>
@@ -36,29 +36,27 @@
         <div id="userContainer" ng-show="currentTab == 'users' ?true:false" style="width: 1024px">
             <div class="row" style="width: 70%">
                 <div style="margin-left: 30%">
-                    <input class="form-control" style="border-radius: 50px;box-shadow: 0 0 10px #c7c7c7;" type="text" ng-model="search" placeholder="Search" ng-change="figureOutItemsToDisplay()" />
+                    <input class="form-control" style="box-shadow: 0 0 10px #c7c7c7;" type="text" ng-model="search" placeholder="Search" ng-change="figureOutItemsToDisplay()" />
                 </div>
                  <img ng-src="./modules/core/client/img/plus.png" ng-click="addMachines()" style="width: 30px;height: 30px;right: 200px;top: 0px;position: absolute;"></img>
             </div>
           <div class='md-padding' layout="row" layout-wrap style="margin-top: 30px;height: 100%;width: 100%">
                 <md-card  ng-repeat="user in pagedItems" style="width: 250px;height: 180px;margin: 25px;
                 box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);">
-                  <md-card-title>
+                  <md-card-title style="padding-top: 16px;">
                     <md-card-title-text>
                       <!--<span class="md-headline">Card with image</span>-->
                       <span style="color: #666;font-size: 18px">{{user.machineAllocated[0].companyName}}</span>
-                      <span style="color: #666;font-size: 18px">{{user.machineAllocated[0].machineName}}</span>
-                    
+                      <span style="color: #999;font-size: 16px">{{user.machineAllocated[0].machineName}}</span>
+                       </br>
                        <span style="margin-top: 4px;color: #333333" >USER</span>
                        <span style="margin: 1px;color: #999;font-size: 14px">{{user.firstName}}</span>
                        <!--<span class="md-subhead">USE</span>-->
                     </md-card-title-text>
-                    <md-card-title-media>
-                       <img id="editIcon" ng-click="editMachines(user)" ng-src="./modules/core/client/img/edit.png" style="width: 25px;height: 25px"></img>
-                    </md-card-title-media>
+                   
                   </md-card-title>
                   <md-card-actions layout="row" layout-align="end center" style="margin: 0px">
-                    <md-button style="width: 100%;background: #08c65b;color: white" >Details</md-button>
+                    <md-button style="width: 100%;height: 40px ;background: #08c65b;color: white" ng-click="editUser(user)">Details</md-button>
                   </md-card-actions>
               </md-card>   
           </div>
@@ -66,26 +64,37 @@
     <div  id="machineContainer" ng-show="currentTab == 'machines' ?true:false" ng-init="getMachines()" style="width: 1024px"> 
       <div class="row" style="width: 70%">
                 <div  style="margin-left: 30%">
-                    <input class="form-control" style="border-radius: 50px;box-shadow: 0 0 10px #c7c7c7;" type="text" ng-model="search" placeholder="Search" ng-change="figureOutItemsToDisplay()" />
+                    <input class="form-control" style="box-shadow: 0 0 10px #c7c7c7;" type="text" ng-model="search" placeholder="Search" ng-change="figureOutItemsToDisplay()" />
                 </div>
             </div>
         <div class='md-padding' layout="row" layout-wrap style="margin-top: 30px;height: 100%;width: 100%" > 
             <md-card  ng-repeat="machine in machineListById" style="width: 250px;height: 140px;margin: 25px">
               <md-card-title style="padding-top: 5px">
                 <md-card-title-text>
-                  <span style="color: #666;font-size: 18px">{{machine.machineName}}</span>             
+                     <span style="color: #666;font-size: 18px">{{machine.machineName}}</span>             
                       <a style="float: right">
                         <img id="machineImage" style="width: 20px;height: 20px" ng-src="./modules/core/client/img/location.png"/>
                         <span style="color: #999;font-size: 14px">{{machine.location}}</span>
                       </a>
-                      <span style="color: #666;font-size: 16px">Device Id : {{machine.machineId}}</span>
-                      <span style="color: #666;font-size: 16px">Unit Id : {{machine.unitId}}</span>                
+                     <a>
+                       <span style="color: #999;font-size: 16px;position: relative;top: 10px">Device ID :</span>
+                       <span style="color: #666;font-size: 16px;position: relative;top: 10px">{{machine.machineId}}</span>
+                     </a>
+                      <a>
+                       <span style="color: #999;font-size: 16px;position: relative;top: 5px">Unit ID :</span>
+                       <span style="color: #666;font-size: 16px;position: relative;top: 5px">{{machine.unitId}}</span>
+                     </a>
+                    
                 </md-card-title-text>
+                 <hr style="color: #c7c7c7;margin-top: 0px;margin-bottom: 0px;"><hr>
+                 <md-card-title-media>
+                       <img id="editIcon" ng-click="editMachines(user)" ng-src="./modules/core/client/img/edit.png" style="width: 25px;height: 25px;margin-top: 10px"></img>
+                    </md-card-title-media>
               </md-card-title>
               <md-card-actions layout="row" style="margin: 0px;">
-                <table style="width: 100%;height: 100%;margin-bottom: 5px">
+                <table style="width: 100%;height: 100%;margin-bottom: 5px;border-top: 0.5px solid #e2e2e2">
                   <tr>
-                    <td style="text-align: center;border-right: 1px solid #e2e2e2">
+                    <td style="text-align: center; border-right: 1px solid #e2e2e2; padding-top: 2px;">
                        <img id="stats" style="cursor: pointer" ng-click="goToLiveCharts(machine)" ng-src="./modules/core/client/img/stats.png"></img>
                     </td>
                     <td style="text-align: center">

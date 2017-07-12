@@ -34,9 +34,11 @@ module.exports = function (app) {
 
   app.route('/api/machinesData/getGaugeValue/:dIdGauge').get(machine.getGaugeValue);
 
-  app.route('/api/reportHistoric/send').post(machine.sendReport);
+  app.route('/api/machinesData/:dId/:fromDate/:toDate').get(machine.getToFromDataTable);
 
-  app.route('/api/machineData/liveData/:idLive').get(machine.getLiveData);
+  //app.route('/api/reportHistoric/send').post(machine.sendReport);
+
+  app.route('/api/machinesData/liveData/:idLive').get(machine.getLiveData);
 
 
 

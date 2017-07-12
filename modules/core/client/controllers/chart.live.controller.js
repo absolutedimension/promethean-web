@@ -17,9 +17,9 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     $scope.toggleCollapsibleMenu = function () {
       $scope.isCollapsed = !$scope.isCollapsed;
     };
-    $scope.dataD0 = [];
-    $scope.dataD1 = [];
-    $scope.dataD2 = [];
+    $scope.waterin = [];
+    $scope.waterout = [];
+    $scope.oiltemp = [];
     $scope.currentTab = 'live';
 
     var deviceIdTemp = $state.params.machineId;
@@ -65,13 +65,12 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
     }
 
     function getLiveData(){
-        $http.get('api/machineData/liveData/'+deviceId).then(function(response){
+        $http.get('api/machinesData/liveData/'+deviceId).then(function(response){
             var responseData = response.data
             for (var i = 0 ; i < responseData.length ; i++) {
-               // alert("D0 value :"+responseData[i].d0);
-                $scope.dataD0.push(responseData[i].d0);
-                $scope.dataD1.push(responseData[i].d1);
-                $scope.dataD2.push(responseData[i].d2);
+                $scope.waterin.push(responseData[i].waterin);
+                $scope.waterout.push(responseData[i].waterout);
+                $scope.oiltemp.push(responseData[i].oiltemp);           
             }
             $scope.activatedLive = false;
             populateChartLive();
@@ -132,7 +131,7 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
 
         });
       }
-      $timeout(populateLiveData,2500);
+      $timeout(populateLiveData);
 
       function populateChartLive(){
            //Line Chart Starts
@@ -182,13 +181,13 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                 },
                 series: [{
                     name: 'Average Water In',
-                    data: $scope.dataD0
+                    data: $scope.waterin
                 }, {
                     name: 'Average Water Out',
-                    data: $scope.dataD1
+                    data: $scope.waterout
                 }, {
                     name: 'Average Oil Temp',
-                    data: $scope.dataD2
+                    data: $scope.oiltemp
                 }
                 ]
 

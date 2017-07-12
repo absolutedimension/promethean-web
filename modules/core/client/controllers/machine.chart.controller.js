@@ -164,27 +164,27 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
         });
       } 
 
-      function getDataByHour(monthClicked) {
-        var month=monthClicked;
-        var dayClicked = 13;
+    //   function getDataByHour(monthClicked) {
+    //     var month=monthClicked;
+    //     var dayClicked = 13;
        
-        $http.get('api/machinesData/getDataByHour/'+deviceId+"/"+yearSelected+"/"+6+"/"+dayClicked).then(function(response) {
-          var dataByHour = response.data;
-          for(var i= 0;i< dataByHour.length ; i++){
-                var drilldownhourData =  [];
-                seriesDrillDownHour.name  = months[dataByHour[i]._id.Month-1];
-                seriesDrillDownHour.id  = months[dataByHour[i]._id.Month-1];
-                seriesDrillDownHour.drilldown = dataByHour[i]._id.Day;
-                drilldownhourData[0] = dataByHour[i]._id.Day;
-                drilldownhourData[1] = dataByHour[i].totalEnergy;
+    //     $http.get('api/machinesData/getDataByHour/'+deviceId+"/"+yearSelected+"/"+6+"/"+dayClicked).then(function(response) {
+    //       var dataByHour = response.data;
+    //       for(var i= 0;i< dataByHour.length ; i++){
+    //             var drilldownhourData =  [];
+    //             seriesDrillDownHour.name  = months[dataByHour[i]._id.Month-1];
+    //             seriesDrillDownHour.id  = months[dataByHour[i]._id.Month-1];
+    //             seriesDrillDownHour.drilldown = dataByHour[i]._id.Day;
+    //             drilldownhourData[0] = dataByHour[i]._id.Day;
+    //             drilldownhourData[1] = dataByHour[i].totalEnergy;
 
-                seriesDrillDownHour.data.push(drilldownMonthData);
-                $scope.finalDrilldownDataHour.push(seriesDrillDownHour);
-          }
-        }).catch(function(response){
+    //             seriesDrillDownHour.data.push(drilldownMonthData);
+    //             $scope.finalDrilldownDataHour.push(seriesDrillDownHour);
+    //       }
+    //     }).catch(function(response){
 
-        });
-      }
+    //     });
+    //   }
     
       $scope.chartInit = function(){
           prepareSeriesData();
@@ -359,13 +359,13 @@ var highChart= null;
 $scope.isBackButtonVisible = false;
  $scope.startPoint = 0;
 function addLineChart(responseData){
-    $scope.dataD0_hour = [];
-    $scope.dataD1_hour = [];
-    $scope.dataD2_hour = []; 
+    $scope.avg_waterin = [];
+    $scope.avg_waterout = [];
+    $scope.avg_oiltemp = []; 
     for (var i = 0 ; i < responseData.length ; i++) {
-        $scope.dataD0_hour.push(responseData[i].avg_d0);
-        $scope.dataD1_hour.push(responseData[i].avg_d1);
-        $scope.dataD2_hour.push(responseData[i].avg_d2);
+        $scope.avg_waterin.push(responseData[i].avg_waterin);
+        $scope.avg_waterout.push(responseData[i].avg_waterout);
+        $scope.avg_oiltemp.push(responseData[i].avg_oiltemp);
     }
     $scope.startPoint = responseData[0]._id;
     $( ".containerChart" ).remove();
@@ -411,13 +411,13 @@ function addLineChart(responseData){
 
                 series: [{
                     name: 'Average Water In',
-                    data: $scope.dataD0_hour
+                    data: $scope.avg_waterin
                 }, {
                     name: 'Average Water Out',
-                    data: $scope.dataD1_hour
+                    data: $scope.avg_waterout
                 }, {
                     name: 'Average Oil Temp',
-                    data: $scope.dataD2_hour
+                    data: $scope.avg_oiltemp
                 }
                 ]
             });
@@ -492,116 +492,8 @@ function prepareCarouselData(monthClicked){
             $scope.dataToShowInTable = tableDataJson.dailyData[i];
         }
     }
-   // alert("Montn value in loop :"+$scope.dataToShowInTable.length);
-
     $scope.chartClickData = $scope.dataToShowInTable;
-    return;
-    
-   // alert("Inside"+dataByDay.length );
-//    addCarouselDirective();
-//    return;
-    for(var i= 0 ; i < $scope.dataToShowInTable.length ; i ++){
-         if(i < 7){
-             var averageDvalues = {avg_d0:null,avg_d1:null,avg_d2:null};
-             console.log(" I Value in set1  :"+i);
-             tempJson.day[i] = $scope.dataToShowInTable[i]._id;
-             averageDvalues.avg_d0 = $scope.dataToShowInTable[i].avg_d0;
-             averageDvalues.avg_d1 = $scope.dataToShowInTable[i].avg_d1;
-             averageDvalues.avg_d2 = $scope.dataToShowInTable[i].avg_d2;
-             tempJson.totalEnergy.push(averageDvalues);
-
-         }
-         if(i == 7 || $scope.dataToShowInTable.length == i){
-             set1.push(tempJson); 
-         }
-         if(i >= 7 && i < 14){
-              console.log(" I Value in set2 :"+i);
-              tempJson = {day:[],totalEnergy:[]};
-             var averageDvalues = {avg_d0:null,avg_d1:null,avg_d2:null};
-             tempJson.day.splice(i,0,$scope.dataToShowInTable[i]._id);
-             averageDvalues.avg_d0 = $scope.dataToShowInTable[i].avg_d0;
-             averageDvalues.avg_d1 = $scope.dataToShowInTable[i].avg_d1;
-             averageDvalues.avg_d2 = $scope.dataToShowInTable[i].avg_d2;
-             tempJson.totalEnergy.push(averageDvalues);
-
-        }
-        if(i == 13 || $scope.dataToShowInTable.length == i){
-             set2.push(tempJson); 
-         }
-         if(i >= 14 && i < 22){
-              console.log(" I Value :"+i);
-             tempJson.day.push($scope.dataToShowInTable[i]._id);
-             averageDvalues.avg_d0 = $scope.dataToShowInTable[i].avg_d0;
-             averageDvalues.avg_d1 = $scope.dataToShowInTable[i].avg_d1;
-             averageDvalues.avg_d2 = $scope.dataToShowInTable[i].avg_d2;
-             tempJson.totalEnergy.push(averageDvalues);
-            set3 = tempJson;
-            //if(i==21){
-              //  set3.push(tempJson); 
-            // }
-
-        }
-        if(i >= 22 && i < 29){
-             console.log(" I Value :"+i);
-             tempJson.day.push($scope.dataToShowInTable[i]._id);
-             averageDvalues.avg_d0 = $scope.dataToShowInTable[i].avg_d0;
-             averageDvalues.avg_d1 = $scope.dataToShowInTable[i].avg_d1;
-             averageDvalues.avg_d2 = $scope.dataToShowInTable[i].avg_d2;
-             tempJson.totalEnergy.push(averageDvalues);
-             set4 = tempJson;
-             //if(i==28){
-               // set4.push(tempJson); 
-             //}
-
-        }
-        if(i >= 29 && i <= 32){
-             console.log(" I Value :"+i);
-             tempJson.day.push($scope.dataToShowInTable[i]._id);
-             averageDvalues.avg_d0 = $scope.dataToShowInTable[i].avg_d0;
-             averageDvalues.avg_d1 = $scope.dataToShowInTable[i].avg_d1;
-             averageDvalues.avg_d2 = $scope.dataToShowInTable[i].avg_d2;
-             tempJson.totalEnergy.push(averageDvalues);
-             set5 = tempJson;
-            // if(i== 32){
-                //set5.push(tempJson); 
-            // }
-
-        }
-        
-    }
-    chartClickSet.splice(0,0,set1);
-    chartClickSet.splice(1,0,set2);
-
-//     if(set1.day !== undefined ){
-// //alert("Ins +"+set1.day.length);
-//        chartClickSet.splice(1,0,set1);
-//     }
-//     if(set2.day !== undefined ){
-//        //  alert("Set2 +"+set2.day.length);
-//        chartClickSet.splice(2,0,set2);
-//     }
-//         if(set3.day !== undefined ){
-//        chartClickSet.splice(3,0,set3);
-//     }
-//         if(set4.day !== undefined ){
-//        chartClickSet.splice(4,0,set4);
-//     }
-//         if(set5.day !== undefined ){
-//        chartClickSet.splice(5,0,set5);
-//     }
-  
-  
-    $scope.chartClickData = chartClickSet;
-      //alert("Final data length "+chartClickData.length);
-    
 }
-//addCarouselDirective();
-//Tabs
-
-     
-
-//Tabs Ends
-
 
 var carouselDiv = null;
 function addCarouselDirective() {
