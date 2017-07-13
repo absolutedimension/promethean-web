@@ -1618,9 +1618,9 @@ function getLiveData1_4(deviceId,res) {
         Year : {$year : "$ts" },
         Minute : {$minute : "$ts" },
         dId:"$dId"},
-         d0 :{ "$first": "$d0"},
-         d1 :{ "$first": "$d1"},
-         a2 :{ "$first": "$a2 "}
+         waterin :{ "$first": "$d0"},
+         waterout :{ "$first": "$d1"},
+         oiltemp :{ "$first": "$a2"}
        
        }
      }
@@ -1674,9 +1674,9 @@ function getLiveData_14(deviceId,res) {
         Year : {$year : "$ts" },
         Minute : {$minute : "$ts" },
         dId:"$dId"},
-         d0 :{ "$first": "$d0"},
-         d1 :{ "$first": "$d1"},
-         a2 :{ "$first": "$a2"}
+         waterin :{ "$first": "$d0"},
+         waterout :{ "$first": "$d1"},
+         oiltemp :{ "$first": "$a2"}
        
        }
      }
@@ -1702,9 +1702,9 @@ function getLiveData_98(deviceId,res) {
         Year : {$year : "$ts" },
         Minute : {$minute : "$ts" },
         dId:"$dId"},
-         d0 :{ "$first": "$d0"},
-         d1 :{ "$first": "$d1"},
-         d2 :{ "$first": "$d2"}
+         waterin :{ "$first": "$d0"},
+         waterout :{ "$first": "$d1"},
+         oiltemp :{ "$first": "$d2"}
        
        }
      }
@@ -1930,9 +1930,9 @@ function prepareLineDataChart() {
         console.log("Chart outpput data "+JSON.parse(str));
         var chartDataOutput = JSON.parse(str);
         for(var i=0;i<chartDataOutput.length;i++){
-          dataD0_hour.push(chartDataOutput[i].avg_d0);
-          dataD1_hour.push(chartDataOutput[i].avg_d1);
-          dataD2_hour.push(chartDataOutput[i].avg_d2);
+          dataD0_hour.push(chartDataOutput[i].waterin);
+          dataD1_hour.push(chartDataOutput[i].waterout);
+          dataD2_hour.push(chartDataOutput[i].oiltemp);
         }
         startPoint = chartDataOutput[0]._id;
         exportLineChart();

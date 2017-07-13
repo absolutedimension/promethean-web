@@ -112,6 +112,10 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
          'month':[],
          'dailyData':[]
      }
+     var tableDataHour = {
+         'hour':[],
+         'hourlyData':[]
+     }
 
      function getDataByDay(monthClicked) {
         // alert("Inside databy day :"+monthClicked);
@@ -164,27 +168,7 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
         });
       } 
 
-    //   function getDataByHour(monthClicked) {
-    //     var month=monthClicked;
-    //     var dayClicked = 13;
-       
-    //     $http.get('api/machinesData/getDataByHour/'+deviceId+"/"+yearSelected+"/"+6+"/"+dayClicked).then(function(response) {
-    //       var dataByHour = response.data;
-    //       for(var i= 0;i< dataByHour.length ; i++){
-    //             var drilldownhourData =  [];
-    //             seriesDrillDownHour.name  = months[dataByHour[i]._id.Month-1];
-    //             seriesDrillDownHour.id  = months[dataByHour[i]._id.Month-1];
-    //             seriesDrillDownHour.drilldown = dataByHour[i]._id.Day;
-    //             drilldownhourData[0] = dataByHour[i]._id.Day;
-    //             drilldownhourData[1] = dataByHour[i].totalEnergy;
-
-    //             seriesDrillDownHour.data.push(drilldownMonthData);
-    //             $scope.finalDrilldownDataHour.push(seriesDrillDownHour);
-    //       }
-    //     }).catch(function(response){
-
-    //     });
-    //   }
+   
     
       $scope.chartInit = function(){
           prepareSeriesData();
@@ -242,6 +226,7 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                      if( $scope.drilldownCompleted ) {
                          pupulateLineChart(e.point.name.split(" ")[1]);
                          getAverageFlowValue(e.point.name.split(" ")[1]);
+                        
                          //$scope.isFlowContainerVisible = true;
                         // $timeout(populateFlowChart,2000);
                         // return;
@@ -358,15 +343,31 @@ $scope.goToMonths = function(){
 var highChart= null;
 $scope.isBackButtonVisible = false;
  $scope.startPoint = 0;
+
 function addLineChart(responseData){
     $scope.avg_waterin = [];
     $scope.avg_waterout = [];
-    $scope.avg_oiltemp = []; 
+    $scope.avg_oiltemp = [];
+    var tempHourlyData = [];
+   
     for (var i = 0 ; i < responseData.length ; i++) {
         $scope.avg_waterin.push(responseData[i].avg_waterin);
         $scope.avg_waterout.push(responseData[i].avg_waterout);
         $scope.avg_oiltemp.push(responseData[i].avg_oiltemp);
+        //Prepare hourly data.
+         var hourlyDataBind = {
+            _id:null,
+            avg_d0:null,
+            avg_d1:null,
+            avg_d2:null
+        }
+        hourlyDataBind._id = responseData[i]._id ;
+        hourlyDataBind.avg_d0 = responseData[i].avg_waterin;
+        hourlyDataBind.avg_d1 = responseData[i].avg_waterout;
+        hourlyDataBind.avg_d2 = responseData[i].avg_oiltemp;
+        tempHourlyData.push(hourlyDataBind);
     }
+    $scope.chartClickData = tempHourlyData;
     $scope.startPoint = responseData[0]._id;
     $( ".containerChart" ).remove();
     $scope.isBackButtonVisible = true;
