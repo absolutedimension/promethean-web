@@ -167,19 +167,16 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
 
         });
       } 
-
    
-    
       $scope.chartInit = function(){
           prepareSeriesData();
           //getDataByMonth(2017);
-          //getDataByDay();
-       
+          //getDataByDay();     
       }
      
       function getAverageFlowValue(dayClicked){
-         // alert("Day Clicked :"+dayClicked);
-          $http.get('api/machinesData/getAvgFlowByHour/'+deviceId+"/"+yearSelected+"/"+6+"/"+dayClicked).then(function(response){
+          var monthClicked = parseInt(months.indexOf($scope.lastClickedMonth)) + 1;
+          $http.get('api/machinesData/getAvgFlowByHour/'+deviceId+"/"+yearSelected+"/"+monthClicked+"/"+dayClicked).then(function(response){
               var flowResponse = response.data;
                $scope.averageFlowValue =[];
                $scope.averageFlowTimes= [];
@@ -220,32 +217,22 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                  events:{
                  drilldown: function(e) {
                      // alert("Inside Drill Down :"+e.point.name);
-                      $scope.isTableVisible = true;
-                     
-                      
+                      $scope.isTableVisible = true;       
                      if( $scope.drilldownCompleted ) {
                          pupulateLineChart(e.point.name.split(" ")[1]);
-                         getAverageFlowValue(e.point.name.split(" ")[1]);
-                        
-                         //$scope.isFlowContainerVisible = true;
-                        // $timeout(populateFlowChart,2000);
-                        // return;
+                         getAverageFlowValue(e.point.name.split(" ")[1]);            
                      } else {
                          $scope.smallContainer = true;
                          $scope.monthClicked = e.point.name;
-                         //$scope.messageContainerVisible = false;
-                         
                         var messageContainer = angular.element(document.querySelector('#carouselContainer'));
                          messageContainer.empty();
                          prepareCarouselData(months.indexOf(e.point.name)+1);
-                        
-                        //$("mainChartContainer").addClass('col-md-6');
                           addCarouselDirective();  
                      }
                               
                       $scope.drilldownCompleted = true;
-                  
-                      $scope.lastClickedMonth = e.point.id;
+                      //alert("Month value..."+ e.point.name);
+                      $scope.lastClickedMonth = e.point.name;
                      
                     //  getDataByDay($scope.lastClickedMonth);
                 },
