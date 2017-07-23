@@ -82,7 +82,7 @@ exports.getDataByYear = function(req,res,next,id) {
   }
 };
 var dataByYear = {unit1:null,unit2:null};
-function getDataByYear1_4(res,deviceId){
+  function getDataByYear1_4(res,deviceId){
   Machine.aggregate([
      {
        "$match":{ "dId":  deviceId }
@@ -1112,14 +1112,14 @@ exports.getGaugeValue = function(req,res,next,id){
 function getGaugeValue1_4(deviceId,res){
    Machine.aggregate([ {
        "$match":{
-         $and:[ { d2: { $gt: 50} }, { dId: { $eq: deviceId } } ]
+         $and:[ { a0: { $gt: 50} }, { dId: { $eq: deviceId } } ]
        }
      },
      {
      "$group" :{
          _id : "$dId",
         gauge_value : { 
-          "$avg":"$d2"
+          "$avg":"$a0"
          }
        }
      }
@@ -1136,14 +1136,14 @@ function getGaugeValue1_4(deviceId,res){
 function getGaugeValue2_4(deviceId,res){
    Machine.aggregate([ {
        "$match":{
-         $and:[ { d2: { $gt: 50} }, { dId: { $eq: deviceId } } ]
+         $and:[ { a2: { $gt: 50} }, { dId: { $eq: deviceId } } ]
        }
      },
      {
      "$group" :{
          _id : "$dId",
         gauge_value : { 
-          "$avg":"$d2"
+          "$avg":"$a2"
          }
        }
      }
@@ -1369,7 +1369,7 @@ function getAveragePowerLive1_4(deviceId,res) {
      "$group" :{
         _id : "$dId",
         avg_water_power : { 
-          "$avg":{$multiply:[0.06966,"$f0"]}
+          "$avg":{ $multiply:[{$multiply:[0.06966,"$f0"]},{$subtract:["$d1","$d0"] }]}
          }
        }
      }]).exec(function(err,machines){
@@ -1394,8 +1394,8 @@ function getAveragePowerLive2_4(deviceId,res) {
      {
      "$group" :{
         _id : "$dId",
-        avg_water_power : { 
-           "$avg":{$multiply:[0.06966,"$f1"]}
+        avg_water_power : {
+          "$avg":{ $multiply:[{$multiply:[0.06966,"$f1"]},{$subtract:["$d3","$d2"] }]} 
          }
        }
      }]).exec(function(err,machines){
@@ -1420,7 +1420,7 @@ function getAveragePowerLive_14(deviceId,res) {
      "$group" :{
         _id : "$dId",
         avg_water_power : { 
-          "$avg":{$multiply:[0.06966,"$f0"]}
+          "$avg":{ $multiply:[{$multiply:[0.06966,"$f0"]},{$subtract:["$d1","$d0"] }]}
          }
        }
      }]).exec(function(err,machines){
@@ -1445,7 +1445,7 @@ function getAveragePowerLive_98(deviceId,res) {
      "$group" :{
         _id : "$dId",
         avg_water_power : { 
-           "$avg":{$multiply:[0.06966,"$f0"]}
+          "$avg":{ $multiply:[{$multiply:[0.06966,"$f0"]},{$subtract:["$d1","$d0"] }]}
          }
        }
      }]).exec(function(err,machines){

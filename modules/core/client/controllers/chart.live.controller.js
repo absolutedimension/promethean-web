@@ -164,7 +164,7 @@ angular.module('core').controller('ChartLiveController', ['$scope','$http', '$st
                             formatter: function() {
                                 return '<span style="color:'
                                 +this.series.color+'">'
-                                +this.series.name+'</span>';
+                                +this.series.name +'°C'+'</span>';
                             }
                         }
                     }

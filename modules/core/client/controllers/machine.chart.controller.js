@@ -135,27 +135,18 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                 var inside_data = [];
                 var tempData = {name:null,y:null,drilldown:null};
                 var drilldownMonthData =  [];
-                // seriesDrillDown.name  = months[month-1];
-                // seriesDrillDown.id  = months[month-1];
-              
                 tempData.name = "Day "+dataByDay[i]._id;
                 tempData.y = dataByDay[i].totalEnergy;
                 tempData.drilldown = "Day "+dataByDay[i]._id;
 
                 seriesDrillDown.data[i] = tempData;
-
                 //Push reference for drilldown id
                 referenceData.id =  dataByDay[i]._id.toString();
 
                 inside_data[0] = "Day "+dataByDay[i]._id.toString();
                 inside_data[1] =  dataByDay[i].totalEnergy;
                 
-                referenceData.data.push(inside_data);//dataByDay[i]._id.toString();
-                //referenceData.data[1] = dataByDay[i].totalEnergy;
-
-                //$scope.daySeries.push(dataByDay[i]._id);            
-              
-                // $scope.finalDrilldownData.push(seriesDrillDown);
+                referenceData.data.push(inside_data);
                 $scope.finalDrilldownData.push(referenceData);
           }
             $scope.finalDrilldownData.push(seriesDrillDown);
@@ -270,14 +261,14 @@ angular.module('core').controller('MachineChartController', ['$scope','$http','$
                     borderWidth: 0,
                     dataLabels: {
                         enabled: true,
-                        format: '{point.y:.2f} kcal'
+                        format: '{point.y:.0f} kcal'
                     }
                 }
             },
 
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f} kcal</b> of total<br/>'
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f} kcal</b> of total<br/>'
             },
 
             series:[{
