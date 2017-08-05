@@ -74,6 +74,9 @@ exports.getDataByYear = function(req,res,next,id) {
          getDataByYear2_4(res,deviceId);
       }
       break;
+   case 3:
+      getDataByYear_3(res,deviceId);
+      break;
    case 98:
       getDataByYear_98(res,deviceId);
       break;
@@ -82,7 +85,7 @@ exports.getDataByYear = function(req,res,next,id) {
   }
 };
 var dataByYear = {unit1:null,unit2:null};
-  function getDataByYear1_4(res,deviceId){
+function getDataByYear1_4(res,deviceId){
   Machine.aggregate([
      {
        "$match":{ "dId":  deviceId }
@@ -170,6 +173,28 @@ function getDataByYear_14(res,deviceId){
    });
 }
 
+function getDataByYear_3(res,deviceId){
+    Machine.aggregate([
+     {
+       "$match":{ "dId":  deviceId }
+     },
+     {
+      $group :{
+        _id : { Year : {$year : "$ts" } ,dId:"$dId"},
+        totalEnergy : { $sum: { $multiply: [{$subtract:["$a1","$a0"]},"$f0"] } }
+      }
+     }
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine ' +98));
+      } 
+      res.jsonp(machines);
+   });
+}
+
 var dataByMonth = {unit1:null,unit2:null};
 exports.getDataByMonth = function(req,res,next){
   var year_input = parseInt(req.param('year'));
@@ -178,6 +203,10 @@ exports.getDataByMonth = function(req,res,next){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
    switch(deviceId){
+
+   case 3:
+      getDataByMonth_3(res,deviceId,year_input);
+      break; 
     case 4:
       if(unitId == 1) {
         getDataByMonth1_4(res,deviceId,year_input);
@@ -193,6 +222,40 @@ exports.getDataByMonth = function(req,res,next){
       getDataByMonth_14(res,deviceId,year_input);
       break;
   }
+}
+
+function getDataByMonth_3(res,deviceId,year_input){
+     Machine.aggregate([
+     {
+      "$project" :{
+        dayOfMonth_agg :{$dayOfMonth : "$ts"},
+        month_agg : {$month : "$ts"},
+        year_agg  : {$year : "$ts"},
+        hour_agg  : {$hour : "$ts"},
+        a0 :1,
+        a1:1,
+        f0:1,
+        dId:1
+      }
+    },
+     {
+       "$match":{ dId:  deviceId ,year_agg:year_input}
+     },
+     {
+      $group :{
+        _id : "$month_agg",
+         totalEnergy : { $sum: { $multiply: [{$subtract:["$a1","$a0"]},"$f0"] } }
+      }
+     }
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 
 function getDataByMonth1_4(res,deviceId,year_input){
@@ -342,6 +405,9 @@ exports.getDataByDay = function(req,res,next,id){
   var unitId = tempId.split("_")[1];
   console.log("Device Id :"+deviceId,year_input,month_input);
   switch(deviceId){
+    case 3:
+      getDataByDay_3(res,deviceId,year_input,month_input);
+      break;
     case 4:
       if(unitId == 1) {
          getDataByDay1_4(res,deviceId,year_input,month_input);
@@ -357,6 +423,47 @@ exports.getDataByDay = function(req,res,next,id){
       getDataByDay_14(res,deviceId,year_input,month_input);
       break;
   }
+}
+
+function getDataByDay_3(res,deviceId,year_input,month_input){
+    Machine.aggregate([
+     {
+      "$project" :{
+        dayOfMonth_agg :{$dayOfMonth : "$ts"},
+        month_agg : {$month : "$ts"},
+        year_agg  : {$year : "$ts"},
+        hour_agg  : {$hour : "$ts"},
+        a0 :1,
+        a1:1,
+        d2:1,
+        f0:1,
+        dId:1
+      }
+    },
+     {
+       "$match":{ dId:deviceId,year_agg:year_input,month_agg:month_input }
+     },
+     {
+      $group :{
+        _id : "$dayOfMonth_agg",
+        totalEnergy : { $sum: { $multiply: [{$subtract:["$a1","$a0"]},"$f0"] } },
+        avg_d0:{$avg:"$a0"},
+        avg_d1:{$avg:"$a1"},
+        avg_d2:{$avg:"$d2"},
+      }
+     },
+     {
+       $sort:{"_id":1}
+     }
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 
 function getDataByDay1_4(res,deviceId,year_input,month_input){
@@ -536,6 +643,9 @@ exports.getDataByHour = function(req,res,next,id){
   var unitId = tempId.split("_")[1];
   console.log("Param inputs "+year_input,month_input,day_input,deviceId);
    switch(deviceId){
+     case 3:
+      getDataByHour_3(res,deviceId,year_input,month_input,day_input);
+      break;
     case 4:
       if(unitId == 1) {
         getDataByHour1_4(res,deviceId,year_input,month_input,day_input);
@@ -551,6 +661,47 @@ exports.getDataByHour = function(req,res,next,id){
       getDataByHour_14(res,deviceId,year_input,month_input,day_input);
       break;
   }
+}
+
+function getDataByHour_3(res,deviceId,year_input,month_input,day_input) {
+    Machine.aggregate([
+    {
+      "$project" :{
+        dayOfMonth_agg :{$dayOfMonth : "$ts"},
+        month_agg : {$month : "$ts"},
+        year_agg  : {$year : "$ts"},
+        hour_agg  : {$hour : "$ts"},
+        a0 :1,
+        a1:1,
+        d2:1,
+        dId:1,
+        f0:1
+      }
+    },
+    {
+      $match :{year_agg:year_input,month_agg:month_input,dayOfMonth_agg:day_input,dId:deviceId}
+    },
+    {
+      $group: {
+          _id: "$hour_agg",
+            totalEnergy : { $sum: { $multiply: [{$subtract:["$a1","$a0"]},"$f0"] } },
+            avg_waterin:{$avg:"$a0"},
+            avg_waterout:{$avg:"$a1"},
+            avg_oiltemp:{$avg:"$d2"}        
+      }
+    },
+     {
+       $sort:{"_id":1}
+     }
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 
 function getDataByHour1_4(res,deviceId,year_input,month_input,day_input){
@@ -726,6 +877,9 @@ exports.getAverageWaterIn = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
   switch(deviceId){
+    case 3:
+      getAverageWaterIn_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1) {
          getAverageWaterIn1_4(deviceId,res);
@@ -742,6 +896,30 @@ exports.getAverageWaterIn = function(req,res,next,id){
       getAverageWaterIn_98(deviceId,res);
       break;      
   }
+}
+function getAverageWaterIn_3(deviceId,res){
+   Machine.aggregate([
+     {
+       "$match":{
+         $and:[ { a1: { $gt: 30} }, { dId: { $eq: deviceId } } ]
+       }
+     },
+     {
+     $group :{
+        _id : "$dId",
+        avg_water_in : {  $avg:"$a0" }
+       }
+     }
+
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 function getAverageWaterIn1_4(deviceId,res){
    Machine.aggregate([
@@ -849,6 +1027,9 @@ exports.getAverageWaterOut = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
   switch(deviceId){
+    case 3:
+      getAverageWaterOut_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1) {
          getAverageWaterOut1_4(deviceId,res);
@@ -866,6 +1047,29 @@ exports.getAverageWaterOut = function(req,res,next,id){
   }
 }
 
+function getAverageWaterOut_3(deviceId,res){
+     Machine.aggregate([ {
+       "$match":{
+         $and:[ { a1: { $gt: 30} }, { dId: { $eq: deviceId } } ]
+       }
+     },
+     {
+     "$group" :{
+        _id : "$dId",
+        avg_water_out : { 
+          "$avg":"$a1"
+         }
+       }
+     }]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });  
+}
 function getAverageWaterOut1_4(deviceId,res){
      Machine.aggregate([ {
        "$match":{
@@ -1092,6 +1296,9 @@ exports.getGaugeValue = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
    switch(deviceId){
+     case 3:
+      getGaugeValue_3(deviceId,res);
+      break; 
     case 4:
       if(unitId == 1) {
         getGaugeValue1_4(deviceId,res);
@@ -1109,6 +1316,34 @@ exports.getGaugeValue = function(req,res,next,id){
   }
 }
 
+function getGaugeValue_3(deviceId,res){
+   Machine.aggregate([ {
+       "$match":{
+         $and:[ { a1: { $gt: 10} }, { dId: { $eq: deviceId } } ]
+       }
+     },
+      {$sort:{ts:-1} },
+      {$limit:20},
+      {
+     "$group" :{
+         _id : "$dId",
+        gauge_value : { 
+          $avg:"$a1"
+         }
+       }
+        
+     }
+      
+     ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return err;
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
+}
 function getGaugeValue1_4(deviceId,res){
    Machine.aggregate([ {
        "$match":{
@@ -1210,6 +1445,7 @@ function getGaugeValue_98(deviceId,res){
 
 
 var waterInLiveData = {unit1:null,unit2:null};
+//getAverageFlowLive gets average water in
 exports.getAverageFlowLive = function(req,res,next,id){
   console.log("Id is :"+id);
   var machineId = id;
@@ -1217,6 +1453,9 @@ exports.getAverageFlowLive = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
   switch(deviceId){
+    case 3:
+      getAverageWaterInLive_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1){
         getAverageWaterInLive1_4(deviceId,res);
@@ -1233,6 +1472,32 @@ exports.getAverageFlowLive = function(req,res,next,id){
       break;      
   }
 }
+
+ function getAverageWaterInLive_3(deviceId,res) {
+     Machine.aggregate([
+     {
+       "$match":{
+         "dId": deviceId 
+       }
+     },
+     {
+     $group :{
+        _id : "$dId",
+        avg_water_in : {  $avg:"$f0" }
+       }
+     }
+
+   ]).limit(20).exec(function(err,machines){
+      if (err) {
+          console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
+ }
+
 
  function getAverageWaterInLive1_4(deviceId,res) {
      Machine.aggregate([
@@ -1341,6 +1606,9 @@ exports.getAveragePowerLive = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
    switch(deviceId){
+     case 3:
+      getAveragePowerLive_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1){
         getAveragePowerLive1_4(deviceId,res);
@@ -1356,6 +1624,31 @@ exports.getAveragePowerLive = function(req,res,next,id){
       getAveragePowerLive_98(deviceId,res);
       break;      
   }
+}
+
+function getAveragePowerLive_3(deviceId,res) {
+    Machine.aggregate([ 
+     {
+       "$match":{
+         "dId": deviceId 
+       }
+     },
+     {
+     "$group" :{
+        _id : "$dId",
+        avg_water_power : { 
+          "$avg":{ $multiply:[{$multiply:[0.06966,"$f0"]},{$subtract:["$a1","$a0"] }]}
+         }
+       }
+     }]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      }
+      res.jsonp(machines);
+   });
 }
 
 function getAveragePowerLive1_4(deviceId,res) {
@@ -1468,6 +1761,9 @@ exports.getAverageWaterDelTempLive = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
    switch(deviceId){
+     case 3:
+      getAverageWaterDelTempLive_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1){
         getAverageWaterDelTempLive1_4(deviceId,res);
@@ -1483,6 +1779,31 @@ exports.getAverageWaterDelTempLive = function(req,res,next,id){
       getAverageWaterDelTempLive_98(deviceId,res);
       break;      
   }
+}
+
+function getAverageWaterDelTempLive_3(deviceId,res) {
+   Machine.aggregate([
+     {
+       "$match":{
+         "dId": deviceId 
+       }
+     },
+     {
+     "$group" :{
+        _id : "$dId",
+        avg_water_out : { 
+          "$avg":{$subtract:["$a1","$a0"]}
+         }
+       }
+     }]).limit(20).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      }
+      res.jsonp(machines);
+   });  
 }
 
 function getAverageWaterDelTempLive1_4(deviceId,res) {
@@ -1589,6 +1910,9 @@ exports.getLiveData = function(req,res,next,id){
   var deviceId = parseInt(tempId.split("_")[0]);
   var unitId = tempId.split("_")[1];
   switch(deviceId){
+    case 3:
+      getLiveData_3(deviceId,res);
+      break;
     case 4:
       if(unitId == 1){
          getLiveData1_4(deviceId,res);
@@ -1604,6 +1928,35 @@ exports.getLiveData = function(req,res,next,id){
       getLiveData_98(deviceId,res);
       break;      
   }
+}
+
+function getLiveData_3(deviceId,res) {
+    Machine.aggregate([ 
+     {
+       "$match":{ "dId":deviceId }
+     },
+     {
+     "$group" :{
+        _id : { Hour : {$hour : "$ts" } ,Month : {$month : "$ts" },
+        Day : {$dayOfMonth : "$ts" },
+        Year : {$year : "$ts" },
+        Minute : {$minute : "$ts" },
+        dId:"$dId"},
+         waterin :{ "$first": "$a0"},
+         waterout :{ "$first": "$a1"},
+         oiltemp :{ "$first": "$d2"}
+       
+       }
+     }
+     ]).limit(60).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 
 function getLiveData1_4(deviceId,res) {
@@ -1733,6 +2086,9 @@ exports.getAvgFlowByHour = function(req,res,next,id){
   var unitId = tempId.split("_")[1];
   console.log("Param inputs Avg Flow"+year_input,month_input,day_input,deviceId);
   switch(deviceId){
+    case 3:
+      getAvgFlowByHour_3(deviceId,year_input,month_input,day_input,res);
+      break;
     case 4:
       if(unitId == 1){
          getAvgFlowByHour1_4(deviceId,year_input,month_input,day_input,res);
@@ -1748,6 +2104,42 @@ exports.getAvgFlowByHour = function(req,res,next,id){
       getAvgFlowByHour_98(deviceId,year_input,month_input,day_input,res);
       break;      
   }
+}
+
+function  getAvgFlowByHour_3(deviceId,year_input,month_input,day_input,res) {
+   console.log("Param inputs Avg Flow Inside 3"+year_input,month_input,day_input,deviceId);
+  Machine.aggregate([
+    {
+      "$project" :{
+        dayOfMonth_agg :{$dayOfMonth : "$ts"},
+        month_agg : {$month : "$ts"},
+        year_agg  : {$year : "$ts"},
+        hour_agg  : {$hour : "$ts"},
+        f0 :1,
+        dId:1
+      }
+    },
+    {
+      $match :{year_agg:year_input,month_agg:month_input,dayOfMonth_agg:day_input,dId:deviceId}
+    },
+    {
+      $group: {
+          _id: "$hour_agg",
+           averageFlowEnergy : { "$avg" : "$f0"}
+      }
+    },
+     {
+       $sort:{"_id":1}
+     }
+   ]).exec(function(err,machines){
+      if (err) {
+            console.log("Error  :"+err);
+          return next(err);
+        } else if (!machines) {
+        return next(new Error('Failed to load Machine '));
+      } 
+      res.jsonp(machines);
+   });
 }
 
 function  getAvgFlowByHour1_4(deviceId,year_input,month_input,day_input,res) {
